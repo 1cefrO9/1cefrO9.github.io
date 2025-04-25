@@ -1,0 +1,43 @@
+[submodule "themes/PaperMod"]
+	path = themes/PaperMod
+	url = https://github.com/adityatelange/hugo-PaperMod.git
+
+# ------ 原始内容（保留）------
+*.o
+*.a
+*.so
+_obj
+_test
+*.[568vq]
+[568vq].out
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+_testmain.go
+*.exe
+*.test
+/public
+.DS_Store
+.hugo_build.lock
+resources/_gen/
+
+# ------ 新增内容 ------
+# Hugo 补充
+/assets/jsconfig.json
+/.hugo/
+
+# 系统/工具
+Thumbs.db
+*.swp
+node_modules/
+npm-debug.log
+.env
+.idea/
+.vscode/
+
+# Go（可选）
+vendor/
+go.sum
+
