@@ -1,49 +1,75 @@
-<div id="tw-comment"></div>
+<div id="giscus"></div>
 <script>
-    // 默认是暗色，根目录下的配置中的主题默认也是暗色
-    const getStoredTheme = () => localStorage.getItem("pref-theme") === "light" ? "{{ .Site.Params.giscus.lightTheme }}" : "{{ .Site.Params.giscus.darkTheme }}";
-    const setGiscusTheme = () => {
-        const sendMessage = (message) => {
-            const iframe = document.querySelector('iframe.giscus-frame');
-            if (iframe) {
-                iframe.contentWindow.postMessage({giscus: message}, 'https://giscus.app');
-            }
-        }
-        sendMessage({setConfig: {theme: getStoredTheme()}})
-    }
+  // 主题获取逻辑（兼容首次访问无localStorage的情况）
+  const getTheme = () => {
+    const storedTheme = localStorage.getItem("pref-theme");
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return storedTheme || systemTheme;
+  };
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const giscusAttributes = {
-            "src": "https://giscus.app/client.js",
-            "data-repo": "{{ .Site.Params.giscus.repo }}",
-            "data-repo-id": "{{ .Site.Params.giscus.repoId }}",
-            "data-category": "{{ .Site.Params.giscus.category }}",
-            "data-category-id": "{{ .Site.Params.giscus.categoryId }}",
-            "data-mapping": "{{ .Site.Params.giscus.mapping }}",
-            "data-strict": "{{ .Site.Params.giscus.strict }}",
-            "data-reactions-enabled": "{{ .Site.Params.giscus.reactionsEnabled }}",
-            "data-emit-metadata": "{{ .Site.Params.giscus.emitMetadata }}",
-            "data-input-position": "{{ .Site.Params.giscus.inputPosition }}",
-            "data-theme": getStoredTheme(),
-            "data-lang": "{{ .Site.Params.giscus.lang }}",
-            "data-loading": "lazy",
-            "crossorigin": "anonymous",
-        };
-
-        // 动态创建 giscus script
-        const giscusScript = document.createElement("script");
-        Object.entries(giscusAttributes).forEach(
-                ([key, value]) => giscusScript.setAttribute(key, value));
-        document.querySelector("#tw-comment").appendChild(giscusScript);
-
-        // 页面主题变更后，变更 giscus 主题
-        const themeSwitcher = document.querySelector("#theme-toggle");
-        if (themeSwitcher) {
-            themeSwitcher.addEventListener("click", setGiscusTheme);
+  // 主题切换逻辑
+  const setGiscusTheme = () => {
+    const theme = getTheme();
+    const message = {
+      giscus: {
+        setConfig: {
+          theme: theme === 'dark' ? 'dark' : 'light' // 根据你的主题名调整
         }
-        const themeFloatSwitcher = document.querySelector("#theme-toggle-float");
-        if (themeFloatSwitcher) {
-            themeFloatSwitcher.addEventListener("click", setGiscusTheme);
-        }
+      }
+    };
+
+    const iframe = document.querySelector('iframe.giscus-frame');
+    iframe?.contentWindow.postMessage(message, 'https://giscus.app');
+  };
+
+  // 动态加载giscus
+  const initGiscus = () => {
+    const giscus = document.createElement('script');
+    
+    // 配置参数（从Hugo配置中获取）
+    const config = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'sonnycalcr/sonnycalcr.github.io',
+      'data-repo-id': 'R_kgDOMed_Fg',
+      'data-category': 'Announcements',
+      'data-category-id': 'DIC_kwDOMed_Fs4ChXJF',
+      'data-mapping': 'pathname',
+      'data-strict': '0',
+      'data-reactions-enabled': '1',
+      'data-emit-metadata': '0',
+      'data-input-position': 'bottom',
+      'data-theme': getTheme() === 'dark' ? 'dark' : 'light', // 初始主题
+      'data-lang': 'zh-CN',
+      crossorigin: 'anonymous',
+      async: true
+    };
+
+    Object.entries(config).forEach(([key, value]) => {
+      giscus.setAttribute(key, value);
     });
+
+    // 监听主题切换事件
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'https://giscus.app') return;
+      if (event.data.giscus?.loading === false) {
+        setGiscusTheme(); // 初始化时设置主题
+      }
+    });
+
+    document.getElementById('giscus').appendChild(giscus);
+  };
+
+  // 初始化
+  document.addEventListener('DOMContentLoaded', initGiscus);
+
+  // 监听主题切换按钮（需要与你的主题切换逻辑配合）
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      setTimeout(setGiscusTheme, 100); // 等待主题切换完成
+    });
+  }
+
+  // 监听系统主题变化
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setGiscusTheme);
 </script>
