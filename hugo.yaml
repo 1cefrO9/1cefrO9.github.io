@@ -141,9 +141,10 @@ outputs:
 # 图片缓存优化
 caches:
   images:
-    # dir: :cacheDir/images  # 缓存到系统临时目录（默认）
+    dir: :cacheDir/images  # 缓存到系统临时目录（默认）
     # 或指定相对路径（会提交到 Git 仓库）：
-    dir: /assets/images/cache
+    # dir: "J:/BLOG/birdio/assets/images/cache"
+    maxAge: -1
 
 markup:
   goldmark:
