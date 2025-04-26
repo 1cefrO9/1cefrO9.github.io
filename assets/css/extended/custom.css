@@ -1,0 +1,19 @@
+/* 禁用行号选中并调整样式 */
+.highlight table td:first-child {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    opacity: 0.6;
+    padding-right: 1em;
+  }
+  
+  /* 确保代码列宽度填满 */
+  .highlight table td:last-child {
+    width: 100%;
+  }
+  
+  /* 可选：调整行号对齐 */
+  .highlight table td:first-child {
+    text-align: right;
+  }

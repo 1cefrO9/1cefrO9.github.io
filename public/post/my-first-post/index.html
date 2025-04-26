@@ -5,175 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>My First Post | Birdio&#39;s Blog</title>
-<meta name="keywords" content="博客搭建, Bilibili">
-<meta name="description" content="这是第一篇文章
-行内数学公式：$a^2 &#43; b^2 = c^2$。
-块公式，
-$$
-a^2 &#43; b^2 = c^2
-$$
-1&lt;div&gt;
-2$$
-3\boldsymbol{x}_{i&#43;1}&#43;\boldsymbol{x}_{i&#43;2}=\boldsymbol{x}_{i&#43;3}
-4$$
-5&lt;/div&gt;
-1.post-content pre,
-2code {
-3  font-family: &#34;JetBrains Mono&#34;, monospace;
-4  font-size: 1rem;
-5  line-height: 1.2;
-6}
- 1baseURL: &#34;https://sonnycalcr.github.io/&#34; # 主站的 URL
- 2title: SonnyCalcr&#39;s Blog # 站点标题
- 3copyright: &#34;[©2024 SonnyCalcr&#39;s Blog](https://sonnycalcr.github.io/)&#34; # 网站的版权声明，通常显示在页脚
- 4theme: PaperMod # 主题
- 5languageCode: zh-cn # 语言
- 6
- 7enableInlineShortcodes: true # shortcode，类似于模板变量，可以在写 markdown 的时候便捷地插入，官方文档中有一个视频讲的很通俗
- 8hasCJKLanguage: true # 是否有 CJK 的字符
- 9enableRobotsTXT: true # 允许生成 robots.txt
-10buildDrafts: false # 构建时是否包括草稿
-11buildFuture: false # 构建未来发布的内容
-12buildExpired: false # 构建过期的内容
-13enableEmoji: true # 允许 emoji
-14pygmentsUseClasses: true
-15defaultContentLanguage: zh # 顶部首先展示的语言界面
-16defaultContentLanguageInSubdir: false # 是否要在地址栏加上默认的语言代码
-17
-18
-19
-20languages:
-21  zh:
-22    languageName: &#34;中文&#34; # 展示的语言名
-23    weight: 1 # 权重
-24    taxonomies: # 分类系统
-25      category: categories
-26      tag: tags
-27    # https://gohugo.io/content-management/menus/#define-in-site-configuration
-28    menus:
-29      main:
-30        - name: 首页
-31          pageRef: /
-32          weight: 4 # 控制在页面上展示的前后顺序
-33        - name: 归档
-34          pageRef: archives/
-35          weight: 5
-36        - name: 分类
-37          pageRef: categories/
-38          weight: 10
-39        - name: 标签
-40          pageRef: tags/
-41          weight: 10
-42        - name: 搜索
-43          pageRef: search/
-44          weight: 20
-45        - name: 关于
-46          pageRef: about/
-47          weight: 21
-48
-49# https://github.com/adityatelange/hugo-PaperMod/wiki/Features#search-page
-50outputs:
-51  home:
-52    - HTML # 生成的静态页面
-53    - RSS # 这个其实无所谓
-54    - JSON # necessary for search, 这里的配置修改好之后，一定要重新生成一下
-55
-56# 搜索
-57fuseOpts:
-58    isCaseSensitive: false # 是否大小写敏感
-59    shouldSort: true # 是否排序
-60    location: 0
-61    distance: 1000
-62    threshold: 0.4
-63    minMatchCharLength: 0
-64    # limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
-65    keys: [&#34;title&#34;, &#34;permalink&#34;, &#34;summary&#34;, &#34;content&#34;]
-66    includeMatches: true
-67
-68# 评论的设置
-69giscus:
-70    repo: &#34;1cefrO9/1cefrO9.github.io&#34;
-71    repoId: &#34;R_kgDOOfgFrw&#34;
-72    category: &#34;Announcements&#34;
-73    categoryId: &#34;DIC_kwDOOfgFr84CpdEI&#34;
-74    mapping: &#34;pathname&#34;
-75    strict: &#34;0&#34;
-76    reactionsEnabled: &#34;1&#34;
-77    emitMetadata: &#34;0&#34;
-78    inputPosition: &#34;bottom&#34;
-79    lightTheme: &#34;light&#34;
-80    darkTheme: &#34;dark&#34;
-81    lang: &#34;zh-CN&#34;
-82    crossorigin: &#34;anonymous&#34;
- 1#include &lt;iostream&gt;
- 2#include &lt;vector&gt;
- 3#include &lt;string&gt;
- 4using namespace std;
- 5
- 6// 构建KMP算法的next数组
- 7vector&lt;int&gt; buildNext(const string&amp; pattern) {
- 8    int n = pattern.size();
- 9    vector&lt;int&gt; next(n, 0);    // next数组初始化为0
-10    int j = 0;                 // 前缀指针
-11
-12    for (int i = 1; i &lt; n; i&#43;&#43;) { // 后缀指针从1开始
-13        while (j &gt; 0 &amp;&amp; pattern[i] != pattern[j]) {
-14            j = next[j - 1];      // 回溯到前一个匹配位置
-15        }
-16        if (pattern[i] == pattern[j]) {
-17            j&#43;&#43;;                  // 匹配成功，前后缀指针同时后移
-18        }
-19        next[i] = j;              // 记录当前位置的最长公共前后缀长度
-20    }
-21    return next;
-22}
-23
-24// KMP主匹配函数
-25vector&lt;int&gt; kmpSearch(const string&amp; text, const string&amp; pattern) {
-26    vector&lt;int&gt; matches;          // 存储所有匹配的起始位置
-27    if (pattern.empty()) return matches;
-28
-29    vector&lt;int&gt; next = buildNext(pattern);
-30    int j = 0;                    // 模式串指针
-31    int m = text.size(), n = pattern.size();
-32
-33    for (int i = 0; i &lt; m; i&#43;&#43;) { // 遍历文本串
-34        while (j &gt; 0 &amp;&amp; text[i] != pattern[j]) {
-35            j = next[j - 1];      // 利用next数组跳过不必要的比较
-36        }
-37        if (text[i] == pattern[j]) {
-38            j&#43;&#43;;
-39        }
-40        if (j == n) {             // 完全匹配成功
-41            matches.push_back(i - n &#43; 1);
-42            j = next[j - 1];       // 继续寻找下一个可能的匹配
-43        }
-44    }
-45    return matches;
-46}
-47
-48int main() {
-49    string text = &#34;ABABDABACDABABCABAB&#34;;
-50    string pattern = &#34;ABABCABAB&#34;;
-51    
-52    vector&lt;int&gt; result = kmpSearch(text, pattern);
-53    
-54    if (result.empty()) {
-55        cout &lt;&lt; &#34;Pattern not found in text.&#34; &lt;&lt; endl;
-56    } else {
-57        cout &lt;&lt; &#34;Pattern found at positions: &#34;;
-58        for (int pos : result) {
-59            cout &lt;&lt; pos &lt;&lt; &#34; &#34;;
-60        }
-61        cout &lt;&lt; endl;
-62    }
-63    return 0;
-64}
-">
+<title>Vim 入门笔记 | Birdio&#39;s Blog</title>
+<meta name="keywords" content="Linux">
+<meta name="description" content="Vim 入门笔记 - Birdio&#39;s Blog">
 <meta name="author" content="Birdio">
 <link rel="canonical" href="http://localhost:1313/post/my-first-post/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.323b50298216d5e1f600eb394fa578a061fe4ac210b6b516504acfdde50cfa68.css" integrity="sha256-MjtQKYIW1eH2AOs5T6V4oGH&#43;SsIQtrUWUErP3eUM&#43;mg=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.34df220a01204e9b20039b217124ceeb037324ab7ca23e0c43b93aa9b108393d.css" integrity="sha256-NN8iCgEgTpsgA5shcSTO6wNzJKt8oj4MQ7k6qbEIOT0=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
@@ -230,186 +67,19 @@ code.has-jax {
 </style>
 <meta property="og:url" content="http://localhost:1313/post/my-first-post/">
   <meta property="og:site_name" content="Birdio&#39;s Blog">
-  <meta property="og:title" content="My First Post">
-  <meta property="og:description" content="这是第一篇文章 行内数学公式：$a^2 &#43; b^2 = c^2$。
-块公式，
-$$ a^2 &#43; b^2 = c^2 $$
-1&lt;div&gt; 2$$ 3\boldsymbol{x}_{i&#43;1}&#43;\boldsymbol{x}_{i&#43;2}=\boldsymbol{x}_{i&#43;3} 4$$ 5&lt;/div&gt; 1.post-content pre, 2code { 3 font-family: &#34;JetBrains Mono&#34;, monospace; 4 font-size: 1rem; 5 line-height: 1.2; 6} 1baseURL: &#34;https://sonnycalcr.github.io/&#34; # 主站的 URL 2title: SonnyCalcr&#39;s Blog # 站点标题 3copyright: &#34;[©2024 SonnyCalcr&#39;s Blog](https://sonnycalcr.github.io/)&#34; # 网站的版权声明，通常显示在页脚 4theme: PaperMod # 主题 5languageCode: zh-cn # 语言 6 7enableInlineShortcodes: true # shortcode，类似于模板变量，可以在写 markdown 的时候便捷地插入，官方文档中有一个视频讲的很通俗 8hasCJKLanguage: true # 是否有 CJK 的字符 9enableRobotsTXT: true # 允许生成 robots.txt 10buildDrafts: false # 构建时是否包括草稿 11buildFuture: false # 构建未来发布的内容 12buildExpired: false # 构建过期的内容 13enableEmoji: true # 允许 emoji 14pygmentsUseClasses: true 15defaultContentLanguage: zh # 顶部首先展示的语言界面 16defaultContentLanguageInSubdir: false # 是否要在地址栏加上默认的语言代码 17 18 19 20languages: 21 zh: 22 languageName: &#34;中文&#34; # 展示的语言名 23 weight: 1 # 权重 24 taxonomies: # 分类系统 25 category: categories 26 tag: tags 27 # https://gohugo.io/content-management/menus/#define-in-site-configuration 28 menus: 29 main: 30 - name: 首页 31 pageRef: / 32 weight: 4 # 控制在页面上展示的前后顺序 33 - name: 归档 34 pageRef: archives/ 35 weight: 5 36 - name: 分类 37 pageRef: categories/ 38 weight: 10 39 - name: 标签 40 pageRef: tags/ 41 weight: 10 42 - name: 搜索 43 pageRef: search/ 44 weight: 20 45 - name: 关于 46 pageRef: about/ 47 weight: 21 48 49# https://github.com/adityatelange/hugo-PaperMod/wiki/Features#search-page 50outputs: 51 home: 52 - HTML # 生成的静态页面 53 - RSS # 这个其实无所谓 54 - JSON # necessary for search, 这里的配置修改好之后，一定要重新生成一下 55 56# 搜索 57fuseOpts: 58 isCaseSensitive: false # 是否大小写敏感 59 shouldSort: true # 是否排序 60 location: 0 61 distance: 1000 62 threshold: 0.4 63 minMatchCharLength: 0 64 # limit: 10 # refer: https://www.fusejs.io/api/methods.html#search 65 keys: [&#34;title&#34;, &#34;permalink&#34;, &#34;summary&#34;, &#34;content&#34;] 66 includeMatches: true 67 68# 评论的设置 69giscus: 70 repo: &#34;1cefrO9/1cefrO9.github.io&#34; 71 repoId: &#34;R_kgDOOfgFrw&#34; 72 category: &#34;Announcements&#34; 73 categoryId: &#34;DIC_kwDOOfgFr84CpdEI&#34; 74 mapping: &#34;pathname&#34; 75 strict: &#34;0&#34; 76 reactionsEnabled: &#34;1&#34; 77 emitMetadata: &#34;0&#34; 78 inputPosition: &#34;bottom&#34; 79 lightTheme: &#34;light&#34; 80 darkTheme: &#34;dark&#34; 81 lang: &#34;zh-CN&#34; 82 crossorigin: &#34;anonymous&#34; 1#include &lt;iostream&gt; 2#include &lt;vector&gt; 3#include &lt;string&gt; 4using namespace std; 5 6// 构建KMP算法的next数组 7vector&lt;int&gt; buildNext(const string&amp; pattern) { 8 int n = pattern.size(); 9 vector&lt;int&gt; next(n, 0); // next数组初始化为0 10 int j = 0; // 前缀指针 11 12 for (int i = 1; i &lt; n; i&#43;&#43;) { // 后缀指针从1开始 13 while (j &gt; 0 &amp;&amp; pattern[i] != pattern[j]) { 14 j = next[j - 1]; // 回溯到前一个匹配位置 15 } 16 if (pattern[i] == pattern[j]) { 17 j&#43;&#43;; // 匹配成功，前后缀指针同时后移 18 } 19 next[i] = j; // 记录当前位置的最长公共前后缀长度 20 } 21 return next; 22} 23 24// KMP主匹配函数 25vector&lt;int&gt; kmpSearch(const string&amp; text, const string&amp; pattern) { 26 vector&lt;int&gt; matches; // 存储所有匹配的起始位置 27 if (pattern.empty()) return matches; 28 29 vector&lt;int&gt; next = buildNext(pattern); 30 int j = 0; // 模式串指针 31 int m = text.size(), n = pattern.size(); 32 33 for (int i = 0; i &lt; m; i&#43;&#43;) { // 遍历文本串 34 while (j &gt; 0 &amp;&amp; text[i] != pattern[j]) { 35 j = next[j - 1]; // 利用next数组跳过不必要的比较 36 } 37 if (text[i] == pattern[j]) { 38 j&#43;&#43;; 39 } 40 if (j == n) { // 完全匹配成功 41 matches.push_back(i - n &#43; 1); 42 j = next[j - 1]; // 继续寻找下一个可能的匹配 43 } 44 } 45 return matches; 46} 47 48int main() { 49 string text = &#34;ABABDABACDABABCABAB&#34;; 50 string pattern = &#34;ABABCABAB&#34;; 51 52 vector&lt;int&gt; result = kmpSearch(text, pattern); 53 54 if (result.empty()) { 55 cout &lt;&lt; &#34;Pattern not found in text.&#34; &lt;&lt; endl; 56 } else { 57 cout &lt;&lt; &#34;Pattern found at positions: &#34;; 58 for (int pos : result) { 59 cout &lt;&lt; pos &lt;&lt; &#34; &#34;; 60 } 61 cout &lt;&lt; endl; 62 } 63 return 0; 64} ">
+  <meta property="og:title" content="Vim 入门笔记">
+  <meta property="og:description" content="Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod">
   <meta property="og:locale" content="zh">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
     <meta property="article:published_time" content="2025-04-25T16:53:23+08:00">
     <meta property="article:modified_time" content="2025-04-25T16:53:23+08:00">
-    <meta property="article:tag" content="博客搭建">
-    <meta property="article:tag" content="Bilibili">
+    <meta property="article:tag" content="Linux">
       <meta property="og:image" content="https://i.postimg.cc/7hwBy7VS/calcr.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://i.postimg.cc/7hwBy7VS/calcr.png">
-<meta name="twitter:title" content="My First Post">
-<meta name="twitter:description" content="这是第一篇文章
-行内数学公式：$a^2 &#43; b^2 = c^2$。
-块公式，
-$$
-a^2 &#43; b^2 = c^2
-$$
-1&lt;div&gt;
-2$$
-3\boldsymbol{x}_{i&#43;1}&#43;\boldsymbol{x}_{i&#43;2}=\boldsymbol{x}_{i&#43;3}
-4$$
-5&lt;/div&gt;
-1.post-content pre,
-2code {
-3  font-family: &#34;JetBrains Mono&#34;, monospace;
-4  font-size: 1rem;
-5  line-height: 1.2;
-6}
- 1baseURL: &#34;https://sonnycalcr.github.io/&#34; # 主站的 URL
- 2title: SonnyCalcr&#39;s Blog # 站点标题
- 3copyright: &#34;[©2024 SonnyCalcr&#39;s Blog](https://sonnycalcr.github.io/)&#34; # 网站的版权声明，通常显示在页脚
- 4theme: PaperMod # 主题
- 5languageCode: zh-cn # 语言
- 6
- 7enableInlineShortcodes: true # shortcode，类似于模板变量，可以在写 markdown 的时候便捷地插入，官方文档中有一个视频讲的很通俗
- 8hasCJKLanguage: true # 是否有 CJK 的字符
- 9enableRobotsTXT: true # 允许生成 robots.txt
-10buildDrafts: false # 构建时是否包括草稿
-11buildFuture: false # 构建未来发布的内容
-12buildExpired: false # 构建过期的内容
-13enableEmoji: true # 允许 emoji
-14pygmentsUseClasses: true
-15defaultContentLanguage: zh # 顶部首先展示的语言界面
-16defaultContentLanguageInSubdir: false # 是否要在地址栏加上默认的语言代码
-17
-18
-19
-20languages:
-21  zh:
-22    languageName: &#34;中文&#34; # 展示的语言名
-23    weight: 1 # 权重
-24    taxonomies: # 分类系统
-25      category: categories
-26      tag: tags
-27    # https://gohugo.io/content-management/menus/#define-in-site-configuration
-28    menus:
-29      main:
-30        - name: 首页
-31          pageRef: /
-32          weight: 4 # 控制在页面上展示的前后顺序
-33        - name: 归档
-34          pageRef: archives/
-35          weight: 5
-36        - name: 分类
-37          pageRef: categories/
-38          weight: 10
-39        - name: 标签
-40          pageRef: tags/
-41          weight: 10
-42        - name: 搜索
-43          pageRef: search/
-44          weight: 20
-45        - name: 关于
-46          pageRef: about/
-47          weight: 21
-48
-49# https://github.com/adityatelange/hugo-PaperMod/wiki/Features#search-page
-50outputs:
-51  home:
-52    - HTML # 生成的静态页面
-53    - RSS # 这个其实无所谓
-54    - JSON # necessary for search, 这里的配置修改好之后，一定要重新生成一下
-55
-56# 搜索
-57fuseOpts:
-58    isCaseSensitive: false # 是否大小写敏感
-59    shouldSort: true # 是否排序
-60    location: 0
-61    distance: 1000
-62    threshold: 0.4
-63    minMatchCharLength: 0
-64    # limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
-65    keys: [&#34;title&#34;, &#34;permalink&#34;, &#34;summary&#34;, &#34;content&#34;]
-66    includeMatches: true
-67
-68# 评论的设置
-69giscus:
-70    repo: &#34;1cefrO9/1cefrO9.github.io&#34;
-71    repoId: &#34;R_kgDOOfgFrw&#34;
-72    category: &#34;Announcements&#34;
-73    categoryId: &#34;DIC_kwDOOfgFr84CpdEI&#34;
-74    mapping: &#34;pathname&#34;
-75    strict: &#34;0&#34;
-76    reactionsEnabled: &#34;1&#34;
-77    emitMetadata: &#34;0&#34;
-78    inputPosition: &#34;bottom&#34;
-79    lightTheme: &#34;light&#34;
-80    darkTheme: &#34;dark&#34;
-81    lang: &#34;zh-CN&#34;
-82    crossorigin: &#34;anonymous&#34;
- 1#include &lt;iostream&gt;
- 2#include &lt;vector&gt;
- 3#include &lt;string&gt;
- 4using namespace std;
- 5
- 6// 构建KMP算法的next数组
- 7vector&lt;int&gt; buildNext(const string&amp; pattern) {
- 8    int n = pattern.size();
- 9    vector&lt;int&gt; next(n, 0);    // next数组初始化为0
-10    int j = 0;                 // 前缀指针
-11
-12    for (int i = 1; i &lt; n; i&#43;&#43;) { // 后缀指针从1开始
-13        while (j &gt; 0 &amp;&amp; pattern[i] != pattern[j]) {
-14            j = next[j - 1];      // 回溯到前一个匹配位置
-15        }
-16        if (pattern[i] == pattern[j]) {
-17            j&#43;&#43;;                  // 匹配成功，前后缀指针同时后移
-18        }
-19        next[i] = j;              // 记录当前位置的最长公共前后缀长度
-20    }
-21    return next;
-22}
-23
-24// KMP主匹配函数
-25vector&lt;int&gt; kmpSearch(const string&amp; text, const string&amp; pattern) {
-26    vector&lt;int&gt; matches;          // 存储所有匹配的起始位置
-27    if (pattern.empty()) return matches;
-28
-29    vector&lt;int&gt; next = buildNext(pattern);
-30    int j = 0;                    // 模式串指针
-31    int m = text.size(), n = pattern.size();
-32
-33    for (int i = 0; i &lt; m; i&#43;&#43;) { // 遍历文本串
-34        while (j &gt; 0 &amp;&amp; text[i] != pattern[j]) {
-35            j = next[j - 1];      // 利用next数组跳过不必要的比较
-36        }
-37        if (text[i] == pattern[j]) {
-38            j&#43;&#43;;
-39        }
-40        if (j == n) {             // 完全匹配成功
-41            matches.push_back(i - n &#43; 1);
-42            j = next[j - 1];       // 继续寻找下一个可能的匹配
-43        }
-44    }
-45    return matches;
-46}
-47
-48int main() {
-49    string text = &#34;ABABDABACDABABCABAB&#34;;
-50    string pattern = &#34;ABABCABAB&#34;;
-51    
-52    vector&lt;int&gt; result = kmpSearch(text, pattern);
-53    
-54    if (result.empty()) {
-55        cout &lt;&lt; &#34;Pattern not found in text.&#34; &lt;&lt; endl;
-56    } else {
-57        cout &lt;&lt; &#34;Pattern found at positions: &#34;;
-58        for (int pos : result) {
-59            cout &lt;&lt; pos &lt;&lt; &#34; &#34;;
-60        }
-61        cout &lt;&lt; endl;
-62    }
-63    return 0;
-64}
-">
+<meta name="twitter:title" content="Vim 入门笔记">
+<meta name="twitter:description" content="">
 
 
 <script type="application/ld+json">
@@ -426,7 +96,7 @@ $$
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "My First Post",
+      "name": "Vim 入门笔记",
       "item": "http://localhost:1313/post/my-first-post/"
     }
   ]
@@ -436,14 +106,14 @@ $$
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "My First Post",
-  "name": "My First Post",
-  "description": "这是第一篇文章 行内数学公式：$a^2 + b^2 = c^2$。\n块公式，\n$$ a^2 + b^2 = c^2 $$\n1\u0026lt;div\u0026gt; 2$$ 3\\boldsymbol{x}_{i+1}+\\boldsymbol{x}_{i+2}=\\boldsymbol{x}_{i+3} 4$$ 5\u0026lt;/div\u0026gt; 1.post-content pre, 2code { 3 font-family: \u0026#34;JetBrains Mono\u0026#34;, monospace; 4 font-size: 1rem; 5 line-height: 1.2; 6} 1baseURL: \u0026#34;https://sonnycalcr.github.io/\u0026#34; # 主站的 URL 2title: SonnyCalcr\u0026#39;s Blog # 站点标题 3copyright: \u0026#34;[©2024 SonnyCalcr\u0026#39;s Blog](https://sonnycalcr.github.io/)\u0026#34; # 网站的版权声明，通常显示在页脚 4theme: PaperMod # 主题 5languageCode: zh-cn # 语言 6 7enableInlineShortcodes: true # shortcode，类似于模板变量，可以在写 markdown 的时候便捷地插入，官方文档中有一个视频讲的很通俗 8hasCJKLanguage: true # 是否有 CJK 的字符 9enableRobotsTXT: true # 允许生成 robots.txt 10buildDrafts: false # 构建时是否包括草稿 11buildFuture: false # 构建未来发布的内容 12buildExpired: false # 构建过期的内容 13enableEmoji: true # 允许 emoji 14pygmentsUseClasses: true 15defaultContentLanguage: zh # 顶部首先展示的语言界面 16defaultContentLanguageInSubdir: false # 是否要在地址栏加上默认的语言代码 17 18 19 20languages: 21 zh: 22 languageName: \u0026#34;中文\u0026#34; # 展示的语言名 23 weight: 1 # 权重 24 taxonomies: # 分类系统 25 category: categories 26 tag: tags 27 # https://gohugo.io/content-management/menus/#define-in-site-configuration 28 menus: 29 main: 30 - name: 首页 31 pageRef: / 32 weight: 4 # 控制在页面上展示的前后顺序 33 - name: 归档 34 pageRef: archives/ 35 weight: 5 36 - name: 分类 37 pageRef: categories/ 38 weight: 10 39 - name: 标签 40 pageRef: tags/ 41 weight: 10 42 - name: 搜索 43 pageRef: search/ 44 weight: 20 45 - name: 关于 46 pageRef: about/ 47 weight: 21 48 49# https://github.com/adityatelange/hugo-PaperMod/wiki/Features#search-page 50outputs: 51 home: 52 - HTML # 生成的静态页面 53 - RSS # 这个其实无所谓 54 - JSON # necessary for search, 这里的配置修改好之后，一定要重新生成一下 55 56# 搜索 57fuseOpts: 58 isCaseSensitive: false # 是否大小写敏感 59 shouldSort: true # 是否排序 60 location: 0 61 distance: 1000 62 threshold: 0.4 63 minMatchCharLength: 0 64 # limit: 10 # refer: https://www.fusejs.io/api/methods.html#search 65 keys: [\u0026#34;title\u0026#34;, \u0026#34;permalink\u0026#34;, \u0026#34;summary\u0026#34;, \u0026#34;content\u0026#34;] 66 includeMatches: true 67 68# 评论的设置 69giscus: 70 repo: \u0026#34;1cefrO9/1cefrO9.github.io\u0026#34; 71 repoId: \u0026#34;R_kgDOOfgFrw\u0026#34; 72 category: \u0026#34;Announcements\u0026#34; 73 categoryId: \u0026#34;DIC_kwDOOfgFr84CpdEI\u0026#34; 74 mapping: \u0026#34;pathname\u0026#34; 75 strict: \u0026#34;0\u0026#34; 76 reactionsEnabled: \u0026#34;1\u0026#34; 77 emitMetadata: \u0026#34;0\u0026#34; 78 inputPosition: \u0026#34;bottom\u0026#34; 79 lightTheme: \u0026#34;light\u0026#34; 80 darkTheme: \u0026#34;dark\u0026#34; 81 lang: \u0026#34;zh-CN\u0026#34; 82 crossorigin: \u0026#34;anonymous\u0026#34; 1#include \u0026lt;iostream\u0026gt; 2#include \u0026lt;vector\u0026gt; 3#include \u0026lt;string\u0026gt; 4using namespace std; 5 6// 构建KMP算法的next数组 7vector\u0026lt;int\u0026gt; buildNext(const string\u0026amp; pattern) { 8 int n = pattern.size(); 9 vector\u0026lt;int\u0026gt; next(n, 0); // next数组初始化为0 10 int j = 0; // 前缀指针 11 12 for (int i = 1; i \u0026lt; n; i++) { // 后缀指针从1开始 13 while (j \u0026gt; 0 \u0026amp;\u0026amp; pattern[i] != pattern[j]) { 14 j = next[j - 1]; // 回溯到前一个匹配位置 15 } 16 if (pattern[i] == pattern[j]) { 17 j++; // 匹配成功，前后缀指针同时后移 18 } 19 next[i] = j; // 记录当前位置的最长公共前后缀长度 20 } 21 return next; 22} 23 24// KMP主匹配函数 25vector\u0026lt;int\u0026gt; kmpSearch(const string\u0026amp; text, const string\u0026amp; pattern) { 26 vector\u0026lt;int\u0026gt; matches; // 存储所有匹配的起始位置 27 if (pattern.empty()) return matches; 28 29 vector\u0026lt;int\u0026gt; next = buildNext(pattern); 30 int j = 0; // 模式串指针 31 int m = text.size(), n = pattern.size(); 32 33 for (int i = 0; i \u0026lt; m; i++) { // 遍历文本串 34 while (j \u0026gt; 0 \u0026amp;\u0026amp; text[i] != pattern[j]) { 35 j = next[j - 1]; // 利用next数组跳过不必要的比较 36 } 37 if (text[i] == pattern[j]) { 38 j++; 39 } 40 if (j == n) { // 完全匹配成功 41 matches.push_back(i - n + 1); 42 j = next[j - 1]; // 继续寻找下一个可能的匹配 43 } 44 } 45 return matches; 46} 47 48int main() { 49 string text = \u0026#34;ABABDABACDABABCABAB\u0026#34;; 50 string pattern = \u0026#34;ABABCABAB\u0026#34;; 51 52 vector\u0026lt;int\u0026gt; result = kmpSearch(text, pattern); 53 54 if (result.empty()) { 55 cout \u0026lt;\u0026lt; \u0026#34;Pattern not found in text.\u0026#34; \u0026lt;\u0026lt; endl; 56 } else { 57 cout \u0026lt;\u0026lt; \u0026#34;Pattern found at positions: \u0026#34;; 58 for (int pos : result) { 59 cout \u0026lt;\u0026lt; pos \u0026lt;\u0026lt; \u0026#34; \u0026#34;; 60 } 61 cout \u0026lt;\u0026lt; endl; 62 } 63 return 0; 64} ",
+  "headline": "Vim 入门笔记",
+  "name": "Vim 入门笔记",
+  "description": "",
   "keywords": [
-    "博客搭建", "Bilibili"
+    "Linux"
   ],
-  "articleBody": "这是第一篇文章 行内数学公式：$a^2 + b^2 = c^2$。\n块公式，\n$$ a^2 + b^2 = c^2 $$\n1\u003cdiv\u003e 2$$ 3\\boldsymbol{x}_{i+1}+\\boldsymbol{x}_{i+2}=\\boldsymbol{x}_{i+3} 4$$ 5\u003c/div\u003e 1.post-content pre, 2code { 3 font-family: \"JetBrains Mono\", monospace; 4 font-size: 1rem; 5 line-height: 1.2; 6} 1baseURL: \"https://sonnycalcr.github.io/\" # 主站的 URL 2title: SonnyCalcr's Blog # 站点标题 3copyright: \"[©2024 SonnyCalcr's Blog](https://sonnycalcr.github.io/)\" # 网站的版权声明，通常显示在页脚 4theme: PaperMod # 主题 5languageCode: zh-cn # 语言 6 7enableInlineShortcodes: true # shortcode，类似于模板变量，可以在写 markdown 的时候便捷地插入，官方文档中有一个视频讲的很通俗 8hasCJKLanguage: true # 是否有 CJK 的字符 9enableRobotsTXT: true # 允许生成 robots.txt 10buildDrafts: false # 构建时是否包括草稿 11buildFuture: false # 构建未来发布的内容 12buildExpired: false # 构建过期的内容 13enableEmoji: true # 允许 emoji 14pygmentsUseClasses: true 15defaultContentLanguage: zh # 顶部首先展示的语言界面 16defaultContentLanguageInSubdir: false # 是否要在地址栏加上默认的语言代码 17 18 19 20languages: 21 zh: 22 languageName: \"中文\" # 展示的语言名 23 weight: 1 # 权重 24 taxonomies: # 分类系统 25 category: categories 26 tag: tags 27 # https://gohugo.io/content-management/menus/#define-in-site-configuration 28 menus: 29 main: 30 - name: 首页 31 pageRef: / 32 weight: 4 # 控制在页面上展示的前后顺序 33 - name: 归档 34 pageRef: archives/ 35 weight: 5 36 - name: 分类 37 pageRef: categories/ 38 weight: 10 39 - name: 标签 40 pageRef: tags/ 41 weight: 10 42 - name: 搜索 43 pageRef: search/ 44 weight: 20 45 - name: 关于 46 pageRef: about/ 47 weight: 21 48 49# https://github.com/adityatelange/hugo-PaperMod/wiki/Features#search-page 50outputs: 51 home: 52 - HTML # 生成的静态页面 53 - RSS # 这个其实无所谓 54 - JSON # necessary for search, 这里的配置修改好之后，一定要重新生成一下 55 56# 搜索 57fuseOpts: 58 isCaseSensitive: false # 是否大小写敏感 59 shouldSort: true # 是否排序 60 location: 0 61 distance: 1000 62 threshold: 0.4 63 minMatchCharLength: 0 64 # limit: 10 # refer: https://www.fusejs.io/api/methods.html#search 65 keys: [\"title\", \"permalink\", \"summary\", \"content\"] 66 includeMatches: true 67 68# 评论的设置 69giscus: 70 repo: \"1cefrO9/1cefrO9.github.io\" 71 repoId: \"R_kgDOOfgFrw\" 72 category: \"Announcements\" 73 categoryId: \"DIC_kwDOOfgFr84CpdEI\" 74 mapping: \"pathname\" 75 strict: \"0\" 76 reactionsEnabled: \"1\" 77 emitMetadata: \"0\" 78 inputPosition: \"bottom\" 79 lightTheme: \"light\" 80 darkTheme: \"dark\" 81 lang: \"zh-CN\" 82 crossorigin: \"anonymous\" 1#include 2#include 3#include 4using namespace std; 5 6// 构建KMP算法的next数组 7vector\u003cint\u003e buildNext(const string\u0026 pattern) { 8 int n = pattern.size(); 9 vector\u003cint\u003e next(n, 0); // next数组初始化为0 10 int j = 0; // 前缀指针 11 12 for (int i = 1; i \u003c n; i++) { // 后缀指针从1开始 13 while (j \u003e 0 \u0026\u0026 pattern[i] != pattern[j]) { 14 j = next[j - 1]; // 回溯到前一个匹配位置 15 } 16 if (pattern[i] == pattern[j]) { 17 j++; // 匹配成功，前后缀指针同时后移 18 } 19 next[i] = j; // 记录当前位置的最长公共前后缀长度 20 } 21 return next; 22} 23 24// KMP主匹配函数 25vector\u003cint\u003e kmpSearch(const string\u0026 text, const string\u0026 pattern) { 26 vector\u003cint\u003e matches; // 存储所有匹配的起始位置 27 if (pattern.empty()) return matches; 28 29 vector\u003cint\u003e next = buildNext(pattern); 30 int j = 0; // 模式串指针 31 int m = text.size(), n = pattern.size(); 32 33 for (int i = 0; i \u003c m; i++) { // 遍历文本串 34 while (j \u003e 0 \u0026\u0026 text[i] != pattern[j]) { 35 j = next[j - 1]; // 利用next数组跳过不必要的比较 36 } 37 if (text[i] == pattern[j]) { 38 j++; 39 } 40 if (j == n) { // 完全匹配成功 41 matches.push_back(i - n + 1); 42 j = next[j - 1]; // 继续寻找下一个可能的匹配 43 } 44 } 45 return matches; 46} 47 48int main() { 49 string text = \"ABABDABACDABABCABAB\"; 50 string pattern = \"ABABCABAB\"; 51 52 vector\u003cint\u003e result = kmpSearch(text, pattern); 53 54 if (result.empty()) { 55 cout \u003c\u003c \"Pattern not found in text.\" \u003c\u003c endl; 56 } else { 57 cout \u003c\u003c \"Pattern found at positions: \"; 58 for (int pos : result) { 59 cout \u003c\u003c pos \u003c\u003c \" \"; 60 } 61 cout \u003c\u003c endl; 62 } 63 return 0; 64} ",
-  "wordCount" : "953",
+  "articleBody": "",
+  "wordCount" : "0",
   "inLanguage": "zh",
   "image": "https://i.postimg.cc/7hwBy7VS/calcr.png","datePublished": "2025-04-25T16:53:23+08:00",
   "dateModified": "2025-04-25T16:53:23+08:00",
@@ -542,184 +212,17 @@ $$
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      My First Post
+      Vim 入门笔记
     </h1>
-    <div class="post-meta"><span title='2025-04-25 16:53:23 +0800 CST'>2025-04-25</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;Birdio
+    <div class="post-meta"><span title='2025-04-25 16:53:23 +0800 CST'>2025-04-25</span>&nbsp;·&nbsp;0 分钟&nbsp;·&nbsp;Birdio
 
 </div>
   </header> 
 
-  <div class="post-content"><p>这是第一篇文章
-行内数学公式：$a^2 + b^2 = c^2$。</p>
-<p>块公式，</p>
-<p>$$
-a^2 + b^2 = c^2
-$$</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="ln">1</span><span class="cl"><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="ln">2</span><span class="cl">$$
-</span></span><span class="line"><span class="ln">3</span><span class="cl">\boldsymbol{x}_{i+1}+\boldsymbol{x}_{i+2}=\boldsymbol{x}_{i+3}
-</span></span><span class="line"><span class="ln">4</span><span class="cl">$$
-</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="ln">1</span><span class="cl"><span class="p">.</span><span class="nc">post-content</span> <span class="nt">pre</span><span class="o">,</span>
-</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nt">code</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">3</span><span class="cl">  <span class="k">font-family</span><span class="p">:</span> <span class="s2">&#34;JetBrains Mono&#34;</span><span class="p">,</span> <span class="kc">monospace</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">4</span><span class="cl">  <span class="k">font-size</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">5</span><span class="cl">  <span class="k">line-height</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nt">baseURL</span><span class="o">:</span> <span class="s2">&#34;https://sonnycalcr.github.io/&#34;</span> <span class="err">#</span> <span class="nt">主站的</span> <span class="nt">URL</span>
-</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="nt">title</span><span class="o">:</span> <span class="nt">SonnyCalcr</span><span class="s1">&#39;s Blog # 站点标题
-</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="s1">copyright: &#34;[©2024 SonnyCalcr&#39;</span><span class="nt">s</span> <span class="nt">Blog</span><span class="o">](</span><span class="nt">https</span><span class="o">://</span><span class="nt">sonnycalcr</span><span class="p">.</span><span class="nc">github</span><span class="p">.</span><span class="nc">io</span><span class="o">/)</span><span class="s2">&#34; # 网站的版权声明，通常显示在页脚
-</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="s2">theme: PaperMod # 主题
-</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="s2">languageCode: zh-cn # 语言
-</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="s2">
-</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="s2">enableInlineShortcodes: true # shortcode，类似于模板变量，可以在写 markdown 的时候便捷地插入，官方文档中有一个视频讲的很通俗
-</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="s2">hasCJKLanguage: true # 是否有 CJK 的字符
-</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="s2">enableRobotsTXT: true # 允许生成 robots.txt
-</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="s2">buildDrafts: false # 构建时是否包括草稿
-</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="s2">buildFuture: false # 构建未来发布的内容
-</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="s2">buildExpired: false # 构建过期的内容
-</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="s2">enableEmoji: true # 允许 emoji
-</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="s2">pygmentsUseClasses: true
-</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="s2">defaultContentLanguage: zh # 顶部首先展示的语言界面
-</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="s2">defaultContentLanguageInSubdir: false # 是否要在地址栏加上默认的语言代码
-</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="s2">
-</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="s2">
-</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="s2">
-</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="s2">languages:
-</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="s2">  zh:
-</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="s2">    languageName: &#34;</span><span class="nt">中文</span><span class="s2">&#34; # 展示的语言名
-</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="s2">    weight: 1 # 权重
-</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="s2">    taxonomies: # 分类系统
-</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="s2">      category: categories
-</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="s2">      tag: tags
-</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="s2">    # https://gohugo.io/content-management/menus/#define-in-site-configuration
-</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="s2">    menus:
-</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="s2">      main:
-</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="s2">        - name: 首页
-</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="s2">          pageRef: /
-</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="s2">          weight: 4 # 控制在页面上展示的前后顺序
-</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="s2">        - name: 归档
-</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="s2">          pageRef: archives/
-</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="s2">          weight: 5
-</span></span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="s2">        - name: 分类
-</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="s2">          pageRef: categories/
-</span></span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="s2">          weight: 10
-</span></span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="s2">        - name: 标签
-</span></span></span><span class="line"><span class="ln">40</span><span class="cl"><span class="s2">          pageRef: tags/
-</span></span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="s2">          weight: 10
-</span></span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="s2">        - name: 搜索
-</span></span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="s2">          pageRef: search/
-</span></span></span><span class="line"><span class="ln">44</span><span class="cl"><span class="s2">          weight: 20
-</span></span></span><span class="line"><span class="ln">45</span><span class="cl"><span class="s2">        - name: 关于
-</span></span></span><span class="line"><span class="ln">46</span><span class="cl"><span class="s2">          pageRef: about/
-</span></span></span><span class="line"><span class="ln">47</span><span class="cl"><span class="s2">          weight: 21
-</span></span></span><span class="line"><span class="ln">48</span><span class="cl"><span class="s2">
-</span></span></span><span class="line"><span class="ln">49</span><span class="cl"><span class="s2"># https://github.com/adityatelange/hugo-PaperMod/wiki/Features#search-page
-</span></span></span><span class="line"><span class="ln">50</span><span class="cl"><span class="s2">outputs:
-</span></span></span><span class="line"><span class="ln">51</span><span class="cl"><span class="s2">  home:
-</span></span></span><span class="line"><span class="ln">52</span><span class="cl"><span class="s2">    - HTML # 生成的静态页面
-</span></span></span><span class="line"><span class="ln">53</span><span class="cl"><span class="s2">    - RSS # 这个其实无所谓
-</span></span></span><span class="line"><span class="ln">54</span><span class="cl"><span class="s2">    - JSON # necessary for search, 这里的配置修改好之后，一定要重新生成一下
-</span></span></span><span class="line"><span class="ln">55</span><span class="cl"><span class="s2">
-</span></span></span><span class="line"><span class="ln">56</span><span class="cl"><span class="s2"># 搜索
-</span></span></span><span class="line"><span class="ln">57</span><span class="cl"><span class="s2">fuseOpts:
-</span></span></span><span class="line"><span class="ln">58</span><span class="cl"><span class="s2">    isCaseSensitive: false # 是否大小写敏感
-</span></span></span><span class="line"><span class="ln">59</span><span class="cl"><span class="s2">    shouldSort: true # 是否排序
-</span></span></span><span class="line"><span class="ln">60</span><span class="cl"><span class="s2">    location: 0
-</span></span></span><span class="line"><span class="ln">61</span><span class="cl"><span class="s2">    distance: 1000
-</span></span></span><span class="line"><span class="ln">62</span><span class="cl"><span class="s2">    threshold: 0.4
-</span></span></span><span class="line"><span class="ln">63</span><span class="cl"><span class="s2">    minMatchCharLength: 0
-</span></span></span><span class="line"><span class="ln">64</span><span class="cl"><span class="s2">    # limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
-</span></span></span><span class="line"><span class="ln">65</span><span class="cl"><span class="s2">    keys: [&#34;</span><span class="nt">title</span><span class="s2">&#34;, &#34;</span><span class="nt">permalink</span><span class="s2">&#34;, &#34;</span><span class="nt">summary</span><span class="s2">&#34;, &#34;</span><span class="nt">content</span><span class="s2">&#34;]
-</span></span></span><span class="line"><span class="ln">66</span><span class="cl"><span class="s2">    includeMatches: true
-</span></span></span><span class="line"><span class="ln">67</span><span class="cl"><span class="s2">
-</span></span></span><span class="line"><span class="ln">68</span><span class="cl"><span class="s2"># 评论的设置
-</span></span></span><span class="line"><span class="ln">69</span><span class="cl"><span class="s2">giscus:
-</span></span></span><span class="line"><span class="ln">70</span><span class="cl"><span class="s2">    repo: &#34;</span><span class="nt">1cefrO9</span><span class="o">/</span><span class="nt">1cefrO9</span><span class="p">.</span><span class="nc">github</span><span class="p">.</span><span class="nc">io</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">71</span><span class="cl"><span class="s2">    repoId: &#34;</span><span class="nt">R_kgDOOfgFrw</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">72</span><span class="cl"><span class="s2">    category: &#34;</span><span class="nt">Announcements</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">73</span><span class="cl"><span class="s2">    categoryId: &#34;</span><span class="nt">DIC_kwDOOfgFr84CpdEI</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">74</span><span class="cl"><span class="s2">    mapping: &#34;</span><span class="nt">pathname</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">75</span><span class="cl"><span class="s2">    strict: &#34;</span><span class="nt">0</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">76</span><span class="cl"><span class="s2">    reactionsEnabled: &#34;</span><span class="nt">1</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">77</span><span class="cl"><span class="s2">    emitMetadata: &#34;</span><span class="nt">0</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">78</span><span class="cl"><span class="s2">    inputPosition: &#34;</span><span class="nt">bottom</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">79</span><span class="cl"><span class="s2">    lightTheme: &#34;</span><span class="nt">light</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">80</span><span class="cl"><span class="s2">    darkTheme: &#34;</span><span class="nt">dark</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">81</span><span class="cl"><span class="s2">    lang: &#34;</span><span class="nt">zh-CN</span><span class="s2">&#34;
-</span></span></span><span class="line"><span class="ln">82</span><span class="cl"><span class="s2">    crossorigin: &#34;</span><span class="nt">anonymous</span><span class="err">&#34;</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
-</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1">// 构建KMP算法的next数组
-</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"></span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">buildNext</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">pattern</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">pattern</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>    <span class="c1">// next数组初始化为0
-</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>                 <span class="c1">// 前缀指针
-</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 后缀指针从1开始
-</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"></span>        <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">pattern</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">pattern</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">14</span><span class="cl">            <span class="n">j</span> <span class="o">=</span> <span class="n">next</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>      <span class="c1">// 回溯到前一个匹配位置
-</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1"></span>        <span class="p">}</span>
-</span></span><span class="line"><span class="ln">16</span><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">pattern</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">pattern</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">17</span><span class="cl">            <span class="n">j</span><span class="o">++</span><span class="p">;</span>                  <span class="c1">// 匹配成功，前后缀指针同时后移
-</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="c1"></span>        <span class="p">}</span>
-</span></span><span class="line"><span class="ln">19</span><span class="cl">        <span class="n">next</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>              <span class="c1">// 记录当前位置的最长公共前后缀长度
-</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="c1"></span>    <span class="p">}</span>
-</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="k">return</span> <span class="n">next</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="ln">23</span><span class="cl">
-</span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="c1">// KMP主匹配函数
-</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="c1"></span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">kmpSearch</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">text</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">pattern</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">26</span><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">matches</span><span class="p">;</span>          <span class="c1">// 存储所有匹配的起始位置
-</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">pattern</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="k">return</span> <span class="n">matches</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">28</span><span class="cl">
-</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next</span> <span class="o">=</span> <span class="n">buildNext</span><span class="p">(</span><span class="n">pattern</span><span class="p">);</span>
-</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>                    <span class="c1">// 模式串指针
-</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">n</span> <span class="o">=</span> <span class="n">pattern</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="ln">32</span><span class="cl">
-</span></span><span class="line"><span class="ln">33</span><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 遍历文本串
-</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="c1"></span>        <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">pattern</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">35</span><span class="cl">            <span class="n">j</span> <span class="o">=</span> <span class="n">next</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>      <span class="c1">// 利用next数组跳过不必要的比较
-</span></span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="c1"></span>        <span class="p">}</span>
-</span></span><span class="line"><span class="ln">37</span><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">pattern</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">38</span><span class="cl">            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">39</span><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="ln">40</span><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>             <span class="c1">// 完全匹配成功
-</span></span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="c1"></span>            <span class="n">matches</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="ln">42</span><span class="cl">            <span class="n">j</span> <span class="o">=</span> <span class="n">next</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>       <span class="c1">// 继续寻找下一个可能的匹配
-</span></span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="c1"></span>        <span class="p">}</span>
-</span></span><span class="line"><span class="ln">44</span><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="ln">45</span><span class="cl">    <span class="k">return</span> <span class="n">matches</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">46</span><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="ln">47</span><span class="cl">
-</span></span><span class="line"><span class="ln">48</span><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">49</span><span class="cl">    <span class="n">string</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#34;ABABDABACDABABCABAB&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">50</span><span class="cl">    <span class="n">string</span> <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#34;ABABCABAB&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">51</span><span class="cl">    
-</span></span><span class="line"><span class="ln">52</span><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">kmpSearch</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">pattern</span><span class="p">);</span>
-</span></span><span class="line"><span class="ln">53</span><span class="cl">    
-</span></span><span class="line"><span class="ln">54</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">55</span><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Pattern not found in text.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">56</span><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">57</span><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Pattern found at positions: &#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">58</span><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">pos</span> <span class="p">:</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="ln">59</span><span class="cl">            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">pos</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">60</span><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="ln">61</span><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">62</span><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="ln">63</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="ln">64</span><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div>
-
-  </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="http://localhost:1313/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">博客搭建</a></li>
-      <li><a href="http://localhost:1313/tags/bilibili/">Bilibili</a></li>
+      <li><a href="http://localhost:1313/tags/linux/">Linux</a></li>
     </ul>
 
   </footer><div id="giscus"></div>

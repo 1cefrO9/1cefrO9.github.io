@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Vim 入门笔记 | Birdio&#39;s Blog</title>
+<meta name="keywords" content="Linux">
+<meta name="description" content="为什么要学习 vim
+最近遇到在服务端编辑代码文件、查日志的场景比较多，所以想要系统学习一下 vim。
+Vim 对于每个服务端开发人员都不陌生，这可能是我们接触最多的 Linux 软件。所有类 Unix 的系统（Linux、Mac）都安装了 vim。当我们通过终端操作文本时，vim 或许是我们唯一的选择。">
+<meta name="author" content="Birdio">
+<link rel="canonical" href="http://localhost:1313/post/vim/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.34df220a01204e9b20039b217124ceeb037324ab7ca23e0c43b93aa9b108393d.css" integrity="sha256-NN8iCgEgTpsgA5shcSTO6wNzJKt8oj4MQ7k6qbEIOT0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="zh" href="http://localhost:1313/post/vim/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
+<meta property="og:url" content="http://localhost:1313/post/vim/">
+  <meta property="og:site_name" content="Birdio&#39;s Blog">
+  <meta property="og:title" content="Vim 入门笔记">
+  <meta property="og:description" content="为什么要学习 vim 最近遇到在服务端编辑代码文件、查日志的场景比较多，所以想要系统学习一下 vim。
+Vim 对于每个服务端开发人员都不陌生，这可能是我们接触最多的 Linux 软件。所有类 Unix 的系统（Linux、Mac）都安装了 vim。当我们通过终端操作文本时，vim 或许是我们唯一的选择。">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-04-25T16:53:23+08:00">
+    <meta property="article:modified_time" content="2025-04-25T16:53:23+08:00">
+    <meta property="article:tag" content="Linux">
+      <meta property="og:image" content="https://i.postimg.cc/7hwBy7VS/calcr.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://i.postimg.cc/7hwBy7VS/calcr.png">
+<meta name="twitter:title" content="Vim 入门笔记">
+<meta name="twitter:description" content="为什么要学习 vim
+最近遇到在服务端编辑代码文件、查日志的场景比较多，所以想要系统学习一下 vim。
+Vim 对于每个服务端开发人员都不陌生，这可能是我们接触最多的 Linux 软件。所有类 Unix 的系统（Linux、Mac）都安装了 vim。当我们通过终端操作文本时，vim 或许是我们唯一的选择。">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://localhost:1313/post/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Vim 入门笔记",
+      "item": "http://localhost:1313/post/vim/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Vim 入门笔记",
+  "name": "Vim 入门笔记",
+  "description": "为什么要学习 vim 最近遇到在服务端编辑代码文件、查日志的场景比较多，所以想要系统学习一下 vim。\nVim 对于每个服务端开发人员都不陌生，这可能是我们接触最多的 Linux 软件。所有类 Unix 的系统（Linux、Mac）都安装了 vim。当我们通过终端操作文本时，vim 或许是我们唯一的选择。\n",
+  "keywords": [
+    "Linux"
+  ],
+  "articleBody": "为什么要学习 vim 最近遇到在服务端编辑代码文件、查日志的场景比较多，所以想要系统学习一下 vim。\nVim 对于每个服务端开发人员都不陌生，这可能是我们接触最多的 Linux 软件。所有类 Unix 的系统（Linux、Mac）都安装了 vim。当我们通过终端操作文本时，vim 或许是我们唯一的选择。\n然而，vim 的使用方式和我们所熟悉的可视化编辑器完全不同，它的的快捷键是如此奇怪，不易上手。因此除非兴趣使然，我们很少会主动学习 vim。它的上限够高，下限也足够低，只需要掌握最基本的操作：↑↓←→、i、、:wq，就可以覆盖大部分使用场景。那为什么还需要再深入学习 vim 呢？\n主要原因是：用较少的学习成本，换来较大的效率提升。Vim 常用的几个快捷键，可以在手指不离开键盘热区的情况下快速定位光标或编辑内容，这些内容的学习成本并不高。如果你开发运维的过程中和 vim 打交道的次数越来越多，掌握这些技巧可以极大的提升开发效率。即使现在没有需求，也可以提前上手这个强大的工具。\n为什么要写这篇文章 现有的 vim 教程 / 文章大多直接罗列完整的 vim 快捷键列表，让人不知从何下手。我认为应当先掌握最重要的、最高频的快捷键，满足日常开发所需；其他低频使用的快捷键，可以作为一个速查表按需查看，vim 的进阶用法也可以之后再深入研究。\n因此，我尝试作为一个 vim 初学者，总结 vim 主要和次要的快捷键，同时提供一些学习 vim 的资源。\n注意：在阅读本文时，你随时可以在终端执行 vimtutor，打开一个教程文本文件，尝试某个快捷键或命令。\n学习资源 Missing Semester - 3. Vim 编辑器：非常推荐的课程，所有内容都很有帮助 Mastering Vim：讲解 vim 里的“编程语言范式”，整体理解 vim vimtutor：安装 vim 后自带的教程，在终端执行 vimtutor 即可打开，mac 系统下是中文文档 Vim Adventure：以游戏的方式学习 vim 这里顺便再推荐一些可视化学习资源：\n数据结构与算法：Data Structure Visualization、Visualgo 正则表达式：regexper Git：Learn Git Branching（强烈推荐）、Visualizing Git 术语说明 vim 中有一些术语：\nmode：标准模式 normal、插入模式 insert、可视模式 visual 等。 verb：vim 里执行的操作，比如删除 d、修改 c、拷贝 y、查找 f 等。verb 后面需要跟一个 motion，表示该操作生效的范围。 motion：vim 里移动的范围，比如向右一个字母 l、向下一行 j、向右一个单词 w 等。本文中有时候也称其为 “range”。 💡 如果你对 Vim 的语法感兴趣，可以阅读这篇文章： https://learnvim.irian.to/basics/vim_grammar\n符号说明 标题的前缀：\n[M]：移动类，move [E]：编辑类，edit [F]：查找类，find 入门 标准模式 / 插入模式 标准模式（Normal Mode）：进入 vim 的默认模式，这个模式下按下任何键不会实际输入到文本中，按下 : 可以执行命令 插入模式（Insert Mode）：在标准模式按下 i 进入插入模式，此时可以输入文本；按下 退出插入模式 💡 除了以上两个模式，vim 还有 visual mode，用来选择一个范围的文本。 建议配置 jj 退出插入模式，这样左手不需要移动到最左上角去按下 。在标准模式下执行：\n1 imap jj \u003cEsc\u003e 可以将这条命令写到 vim 的配置文件中。我实际上是把 jj / kk / jk / kj 都配成了退出插入模式。\n执行命令：: 按下 : 后输入命令，按回车执行。如 :set number 会显示行号。\n退出 vim：:q / ZZ :q / :quit：退出 vim，不作任何改动 :q!：退出 vim，丢弃已有的改动 :wq：保存更改（write）并退出（quit）vim ZZ：等同于 :wq，这个快捷键输入比 :wq 更快，注意是大写 Z 保存文件: :w / :w :w：保存更改 :w ：保存到一个新的文件 [M] 基本移动：h / j / k / l 使用 h、j、k、l 而不是 ←、↓、→、↑，这能够避免将手指移出键盘热区再移回来。如果有必要的话，甚至可以禁用方向键，来强制自己使用 h、j、k、l：\n1 2 3 4 map \u003cLeft\u003e \u003cNop\u003e map \u003cRight\u003e \u003cNop\u003e map \u003cUp\u003e \u003cNop\u003e map \u003cDown\u003e \u003cNop\u003e [M] 前往第一行 / 最后一行：gg / G gg：前往第一行 1G：同 gg G：前往最后一行 [M] 前往第 n 行：nG、:n nG：前往第 n 行。1G 可以前往第一行。如果希望在 vim 中显示行号，可以在标准模式下执行 set number 命令，也可以将这条命令写到 vim 的配置文件中。 :n 也可以前往第 n 行，比如 :123前往第 123 行。 [M] 向右移动一个单词：w / e w：向右移动一个单词，光标将落在下一个单词的首字符 e：向右移动一个单词，光标将落在当前一个单词的最后一个字符 在这里，一个单词的定义是连续的「数字+字母+下划线」，或者连续的「特殊字符」。比如 hello, world!!! 里包含 hello、,、world 和 !!! 四个单词。按 w 跳转时，会跳过单词后面的所有空白字符，落在下一个单词的开头。示例： 1 2 3 4 5 6 7 ↓ 光标在这里 Hello, world! ↑ 按下 w ↑ 按下 e Hello, world! ↑ 按两下 w ↑ 按两下 e 类似的还有 W / E，区别在于这两个快捷键对单词的定义是连续的「非空字符」，即以空格作为单词的分界线。比如 hello, world!!! 里，包含 hello, 和 world!!! 两个单词。\n[M] 向左移动一个单词：b b：向左移动到前一个单词的首字符，相当于是 w 的逆操作。b 取 backwards 首字母，「单词」的定义同 w。 2b：向左移动两个单词，nb 向左移动 n 个单词。 B：向左移动一个单词，将「空格」作为单词的分隔符（同 W、E）。 [M] 前往当前行第一个 / 最后一个字符：0 $ _ ^ 0：前往第一个字符，可以理解成是第 0 列 $：前往最后一个字符 _：前往第一个非空字符，这在编写 python 等有缩进的代码时很有用。^ 等价。 删除字符：x / X x：删除当前字符，等同于 X：删除前一个字符 删除单词：dw 「单词」的定义同 w，单词后面的任意多个空格将被删除。\n类似的还有 dW，删除下一个空格前的单词。\n删除当前行：dd [E] 在当前位置后面插入：a i 在当前位置前面插入（insert），a 在当前位置后面插入（append）。\n[E] 在当前行开始 / 末尾插入：I / A [E] 在当前行下面 / 上面插入新行：o / O 插入新的空白行。\n[E] 改变大小写：~ / gu / gU ~：将光标下的字母改变大小写。3~ 是将光标开始的 3 个字母改变大小写。 gu：指定范围的字母变成小写。比如 guw 是后一个单词全变成小写，guj 是当前整行改成小写。gU 则是改成大写。 guu：将当前行的字母改成小写。gUU 是改成大写。 guiw：将光标所在的单词改成小写。详见下文 inside / around。 [F] 移动到下一个指定字符：f f：ft 移动到下一个 t 出现的位置，f2 移动到下一个 2 出现的位置。f 取 forward 的首字母。 F：F 类似于 f，向前移动到前一个指定字符。 t：t 类似于 f，只不过光标会移动到下一个指定字符之前；T 类似于 F，只不过光标会移动到前一个指定字符之后。t 取 until 的含义。 示例 1 2 3 4 5 6 7 ↓ 光标在这里 Hello, world! ↑ fo ↑ fr ↑ Fh ↑ to ↑ Th [E] 撤销 / 重做：u / + r u：撤销（undo） + r：重做（redo） 中场休息：vim 的一些模式 重复 n 次操作：n Vim 中几乎所有操作都可以通过一个 n 前缀来重复 n 次：\n5h 向左移动 5 个字符。5j 向下移动 5 行。2w 向右移动两个单词，等同于按两次 w。 2x 删除两个字符，2X 向左删除两个字符。 3fa 在当前行查找第 3 次出现的 a，等同于按 3 次 fa。 2u 撤销前两步操作，等同于按两次 u。2 + r 重做被撤销的两步操作，等同于按两次 + r。 💡 移动类命令 (motion) 如 h / w，和操作类命令 (verb) 如 d / x / f 都支持在前面加 n 来重复多次。\n操作任意范围： 我们以 d 命令为例。d 可以和任意光标移动的操作结合，来删除一个范围的内容。\n比如：w 是跳到下一个单词的开头，那么 dw 就是删除到下一个单词的开头；b 是跳转到前一个单词的开头，那么 db 就是删除到前一个单词的开头。以此类推，d0 是删除当前位置到行开头的所有内容，dG 是删除当前行到文件末尾的所有内容，dgg 是删除当前行到文件开头的所有内容。\n大部分命令都支持 和 两种模式，比如 d2w 和 2dw 都是删除后两个单词。但在语义上有区别：d2w 表示删除 2w 范围的内容，而 2dw 表示 dw 命令重复 2 次。\n💡 d / c / y 等 verb，都支持上述模式。比如 c2w 修改后两个单词，y2j 复制下两行。\n命令的小写和大写：d / D 等 不同的方向：\nx 向右、X 向左 p 向下、P 向上 o 向下、O 向上 f 向右、F 向左 更严格的条件： w 将特殊字符作为独立单词，W 只将空格作为单词分隔符 e / E、b / B 同理 更大的范围： a 在当前位置后面插入、A 在当前行末尾插入 i 在当前位置前插入、I 在当前行开始插入 d 删除一个范围、D 删除到行末尾 c 删除一个范围、C 删除到行末尾，并进入编辑模式 s 删除当前字符，并进入编辑模式；S 删除当前整行，并进入编辑模式 连续操作： r 替换一个字符、R 连续替换多个字符直到按下 两个字母重复：dd / cc / yy / guu 两个 verb 字母重复，表示对当前整行操作：\ndd：删除整行 cc：删除整行，并进入编辑模式 yy：复制整行 guu：当前整行变成小写 gUU：当前整行变成大写 重复上次操作：. / , / ; .：重复上次的编辑操作。比如执行了 A123 在当前行尾插入 123 后，可以移动到下一行，按 . 在该行末尾插入 123。 , / ;：重复当前行内的上一次 / 下一次 f 查找。比如在当前行按 fa 找到第一个 a 字符后，按 ; 可以查找下一个，等价于再按 fa。按 , 是查找上一个，等价于 Fa。 n / N：按 /bar 搜索 bar 字符串后，按 n 可以查找下一个，按 N 查找上一个。 进阶 [E] 替换一个字符：r r：再按下任意键，替换（replace）当前字符，等同于 x + i。示例：\n1 2 3 4 5 ↓ 光标在这里 Helle, world! # 先按 r，再按 o Hello, world! ↑ 光标在这里 [E] 替换连续多个字符：R R：替换连续的多个字符，按下 可以退出替换模式。\n[E] 更改一个范围的内容：c c 取 change 的首字母，这个命令的便捷之处在于将「删除操作」和「进入编辑模式」合二为一，可以少按一个键。\ncw：更改下一个单词，等同于 dw + i c2w：更改后两个单词，等同于 d2w + i c$：更改从当前位置到行结束的所有内容，等同于 d$ + i 和 d 一样，c 也可以和任意光标移动的操作符结合，来更改一个范围的内容。 删除当前字符，并进入编辑模式：s s 等同于 x + i。\n[E] 删除当前整行，并进入编辑模式：S / cc S 等同于 dd + o。cc 也可以删除整行，并进入编辑模式。\n[E] 从当前位置开始向右删除整行：D D 等同于 d$。\n[E] 从当前位置开始向右删除整行，并进入编辑模式：C 等同于 c$，或者 d$ + a，或者 D + a。\n[V] 可视模式选择内容：v / V / + v 按下 v 进入可视模式（visual mode），然后移动光标以选择文本。可以针对选中的文本执行任意操作 (verb)，比如：\n按下 y 可以复制选中的文本，再移动到别的位置按下 p 粘贴这些文本 按下 d 可以删除选中的文本 ",
+  "wordCount" : "4165",
+  "inLanguage": "zh",
+  "image": "https://i.postimg.cc/7hwBy7VS/calcr.png","datePublished": "2025-04-25T16:53:23+08:00",
+  "dateModified": "2025-04-25T16:53:23+08:00",
+  "author":{
+    "@type": "Person",
+    "name": "Birdio"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/post/vim/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Birdio's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class=" dark" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="Birdio&#39;s Blog (Alt + H)">Birdio&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/" title="Birdio&#39;s Blog">
+                    <span>首页</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/archives/" title="归档">
+                    <span>归档</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/categories/" title="Categories">
+                    <span>分类</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="搜索">
+                    <span>搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/about/" title="关于">
+                    <span>关于</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Vim 入门笔记
+    </h1>
+    <div class="post-meta"><span title='2025-04-25 16:53:23 +0800 CST'>2025-04-25</span>&nbsp;·&nbsp;9 分钟&nbsp;·&nbsp;Birdio
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%ad%a6%e4%b9%a0-vim" aria-label="为什么要学习 vim">为什么要学习 vim</a></li>
+                <li>
+                    <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%86%99%e8%bf%99%e7%af%87%e6%96%87%e7%ab%a0" aria-label="为什么要写这篇文章">为什么要写这篇文章</a></li>
+                <li>
+                    <a href="#%e5%ad%a6%e4%b9%a0%e8%b5%84%e6%ba%90" aria-label="学习资源">学习资源</a></li>
+                <li>
+                    <a href="#%e6%9c%af%e8%af%ad%e8%af%b4%e6%98%8e" aria-label="术语说明">术语说明</a></li>
+                <li>
+                    <a href="#%e7%ac%a6%e5%8f%b7%e8%af%b4%e6%98%8e" aria-label="符号说明">符号说明</a></li>
+                <li>
+                    <a href="#%e5%85%a5%e9%97%a8" aria-label="入门">入门</a><ul>
+                        
+                <li>
+                    <a href="#%e6%a0%87%e5%87%86%e6%a8%a1%e5%bc%8f--%e6%8f%92%e5%85%a5%e6%a8%a1%e5%bc%8f" aria-label="标准模式 / 插入模式">标准模式 / 插入模式</a></li>
+                <li>
+                    <a href="#%e6%89%a7%e8%a1%8c%e5%91%bd%e4%bb%a4" aria-label="执行命令：:">执行命令：:</a></li>
+                <li>
+                    <a href="#%e9%80%80%e5%87%ba-vimq--zz" aria-label="退出 vim：:q / ZZ">退出 vim：:q / ZZ</a></li>
+                <li>
+                    <a href="#%e4%bf%9d%e5%ad%98%e6%96%87%e4%bb%b6-w--w" aria-label="保存文件: :w / :w ">保存文件: :w / :w </a></li>
+                <li>
+                    <a href="#m-%e5%9f%ba%e6%9c%ac%e7%a7%bb%e5%8a%a8h--j--k--l" aria-label="[M] 基本移动：h / j / k / l">[M] 基本移动：h / j / k / l</a></li>
+                <li>
+                    <a href="#m-%e5%89%8d%e5%be%80%e7%ac%ac%e4%b8%80%e8%a1%8c--%e6%9c%80%e5%90%8e%e4%b8%80%e8%a1%8cgg--g" aria-label="[M] 前往第一行 / 最后一行：gg / G">[M] 前往第一行 / 最后一行：gg / G</a></li>
+                <li>
+                    <a href="#m-%e5%89%8d%e5%be%80%e7%ac%ac-n-%e8%a1%8cngn" aria-label="[M] 前往第 n 行：nG、:n">[M] 前往第 n 行：nG、:n</a></li>
+                <li>
+                    <a href="#m-%e5%90%91%e5%8f%b3%e7%a7%bb%e5%8a%a8%e4%b8%80%e4%b8%aa%e5%8d%95%e8%af%8dw--e" aria-label="[M] 向右移动一个单词：w / e">[M] 向右移动一个单词：w / e</a></li>
+                <li>
+                    <a href="#m-%e5%90%91%e5%b7%a6%e7%a7%bb%e5%8a%a8%e4%b8%80%e4%b8%aa%e5%8d%95%e8%af%8db" aria-label="[M] 向左移动一个单词：b">[M] 向左移动一个单词：b</a></li>
+                <li>
+                    <a href="#m-%e5%89%8d%e5%be%80%e5%bd%93%e5%89%8d%e8%a1%8c%e7%ac%ac%e4%b8%80%e4%b8%aa--%e6%9c%80%e5%90%8e%e4%b8%80%e4%b8%aa%e5%ad%97%e7%ac%a60----_--" aria-label="[M] 前往当前行第一个 / 最后一个字符：0  $  _  ^">[M] 前往当前行第一个 / 最后一个字符：0  $  _  ^</a></li>
+                <li>
+                    <a href="#%e5%88%a0%e9%99%a4%e5%ad%97%e7%ac%a6x--x" aria-label="删除字符：x / X">删除字符：x / X</a></li>
+                <li>
+                    <a href="#%e5%88%a0%e9%99%a4%e5%8d%95%e8%af%8ddw" aria-label="删除单词：dw">删除单词：dw</a></li>
+                <li>
+                    <a href="#%e5%88%a0%e9%99%a4%e5%bd%93%e5%89%8d%e8%a1%8cdd" aria-label="删除当前行：dd">删除当前行：dd</a></li>
+                <li>
+                    <a href="#e-%e5%9c%a8%e5%bd%93%e5%89%8d%e4%bd%8d%e7%bd%ae%e5%90%8e%e9%9d%a2%e6%8f%92%e5%85%a5a" aria-label="[E] 在当前位置后面插入：a">[E] 在当前位置后面插入：a</a></li>
+                <li>
+                    <a href="#e-%e5%9c%a8%e5%bd%93%e5%89%8d%e8%a1%8c%e5%bc%80%e5%a7%8b--%e6%9c%ab%e5%b0%be%e6%8f%92%e5%85%a5i--a" aria-label="[E] 在当前行开始 / 末尾插入：I / A">[E] 在当前行开始 / 末尾插入：I / A</a></li>
+                <li>
+                    <a href="#e-%e5%9c%a8%e5%bd%93%e5%89%8d%e8%a1%8c%e4%b8%8b%e9%9d%a2--%e4%b8%8a%e9%9d%a2%e6%8f%92%e5%85%a5%e6%96%b0%e8%a1%8co--o" aria-label="[E] 在当前行下面 / 上面插入新行：o / O">[E] 在当前行下面 / 上面插入新行：o / O</a></li>
+                <li>
+                    <a href="#e-%e6%94%b9%e5%8f%98%e5%a4%a7%e5%b0%8f%e5%86%99--gu--gu" aria-label="[E] 改变大小写：~ / gu / gU">[E] 改变大小写：~ / gu / gU</a></li>
+                <li>
+                    <a href="#f-%e7%a7%bb%e5%8a%a8%e5%88%b0%e4%b8%8b%e4%b8%80%e4%b8%aa%e6%8c%87%e5%ae%9a%e5%ad%97%e7%ac%a6f" aria-label="[F] 移动到下一个指定字符：f">[F] 移动到下一个指定字符：f</a></li>
+                <li>
+                    <a href="#e-%e6%92%a4%e9%94%80--%e9%87%8d%e5%81%9au----r" aria-label="[E] 撤销 / 重做：u / &#43; r">[E] 撤销 / 重做：u / + r</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e4%b8%ad%e5%9c%ba%e4%bc%91%e6%81%afvim-%e7%9a%84%e4%b8%80%e4%ba%9b%e6%a8%a1%e5%bc%8f" aria-label="中场休息：vim 的一些模式">中场休息：vim 的一些模式</a><ul>
+                        
+                <li>
+                    <a href="#%e9%87%8d%e5%a4%8d-n-%e6%ac%a1%e6%93%8d%e4%bd%9cn" aria-label="重复 n 次操作：n">重复 n 次操作：n</a></li>
+                <li>
+                    <a href="#%e6%93%8d%e4%bd%9c%e4%bb%bb%e6%84%8f%e8%8c%83%e5%9b%b4" aria-label="操作任意范围：">操作任意范围：</a></li>
+                <li>
+                    <a href="#%e5%91%bd%e4%bb%a4%e7%9a%84%e5%b0%8f%e5%86%99%e5%92%8c%e5%a4%a7%e5%86%99d--d-%e7%ad%89" aria-label="命令的小写和大写：d / D 等">命令的小写和大写：d / D 等</a></li>
+                <li>
+                    <a href="#%e4%b8%a4%e4%b8%aa%e5%ad%97%e6%af%8d%e9%87%8d%e5%a4%8ddd--cc--yy--guu" aria-label="两个字母重复：dd / cc / yy / guu">两个字母重复：dd / cc / yy / guu</a></li>
+                <li>
+                    <a href="#%e9%87%8d%e5%a4%8d%e4%b8%8a%e6%ac%a1%e6%93%8d%e4%bd%9c----" aria-label="重复上次操作：. / , / ;">重复上次操作：. / , / ;</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e8%bf%9b%e9%98%b6" aria-label="进阶">进阶</a><ul>
+                        
+                <li>
+                    <a href="#e-%e6%9b%bf%e6%8d%a2%e4%b8%80%e4%b8%aa%e5%ad%97%e7%ac%a6r" aria-label="[E] 替换一个字符：r">[E] 替换一个字符：r</a></li>
+                <li>
+                    <a href="#e-%e6%9b%bf%e6%8d%a2%e8%bf%9e%e7%bb%ad%e5%a4%9a%e4%b8%aa%e5%ad%97%e7%ac%a6r" aria-label="[E] 替换连续多个字符：R">[E] 替换连续多个字符：R</a></li>
+                <li>
+                    <a href="#e-%e6%9b%b4%e6%94%b9%e4%b8%80%e4%b8%aa%e8%8c%83%e5%9b%b4%e7%9a%84%e5%86%85%e5%ae%b9c" aria-label="[E] 更改一个范围的内容：c">[E] 更改一个范围的内容：c</a></li>
+                <li>
+                    <a href="#%e5%88%a0%e9%99%a4%e5%bd%93%e5%89%8d%e5%ad%97%e7%ac%a6%e5%b9%b6%e8%bf%9b%e5%85%a5%e7%bc%96%e8%be%91%e6%a8%a1%e5%bc%8fs" aria-label="删除当前字符，并进入编辑模式：s">删除当前字符，并进入编辑模式：s</a></li>
+                <li>
+                    <a href="#e-%e5%88%a0%e9%99%a4%e5%bd%93%e5%89%8d%e6%95%b4%e8%a1%8c%e5%b9%b6%e8%bf%9b%e5%85%a5%e7%bc%96%e8%be%91%e6%a8%a1%e5%bc%8fs--cc" aria-label="[E] 删除当前整行，并进入编辑模式：S / cc">[E] 删除当前整行，并进入编辑模式：S / cc</a></li>
+                <li>
+                    <a href="#e-%e4%bb%8e%e5%bd%93%e5%89%8d%e4%bd%8d%e7%bd%ae%e5%bc%80%e5%a7%8b%e5%90%91%e5%8f%b3%e5%88%a0%e9%99%a4%e6%95%b4%e8%a1%8cd" aria-label="[E] 从当前位置开始向右删除整行：D">[E] 从当前位置开始向右删除整行：D</a></li>
+                <li>
+                    <a href="#e-%e4%bb%8e%e5%bd%93%e5%89%8d%e4%bd%8d%e7%bd%ae%e5%bc%80%e5%a7%8b%e5%90%91%e5%8f%b3%e5%88%a0%e9%99%a4%e6%95%b4%e8%a1%8c%e5%b9%b6%e8%bf%9b%e5%85%a5%e7%bc%96%e8%be%91%e6%a8%a1%e5%bc%8fc" aria-label="[E] 从当前位置开始向右删除整行，并进入编辑模式：C">[E] 从当前位置开始向右删除整行，并进入编辑模式：C</a></li>
+                <li>
+                    <a href="#v-%e5%8f%af%e8%a7%86%e6%a8%a1%e5%bc%8f%e9%80%89%e6%8b%a9%e5%86%85%e5%ae%b9v--v----v" aria-label="[V] 可视模式选择内容：v / V / &#43; v">[V] 可视模式选择内容：v / V / + v</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="为什么要学习-vim">为什么要学习 vim<a hidden class="anchor" aria-hidden="true" href="#为什么要学习-vim">#</a></h1>
+<p>最近遇到在服务端编辑代码文件、查日志的场景比较多，所以想要系统学习一下 vim。</p>
+<p>Vim 对于每个服务端开发人员都不陌生，这可能是我们接触最多的 Linux 软件。所有类 Unix 的系统（Linux、Mac）都安装了 vim。当我们通过终端操作文本时，vim 或许是我们唯一的选择。</p>
+<p>然而，vim 的使用方式和我们所熟悉的可视化编辑器完全不同，它的的快捷键是如此奇怪，不易上手。因此除非兴趣使然，我们很少会主动学习 vim。它的上限够高，下限也足够低，只需要掌握最基本的操作：↑↓←→、i、<ESC>、:wq，就可以覆盖大部分使用场景。那为什么还需要再深入学习 vim 呢？</p>
+<p>主要原因是：<strong>用较少的学习成本，换来较大的效率提升</strong>。Vim 常用的几个快捷键，可以在手指不离开键盘热区的情况下快速定位光标或编辑内容，这些内容的学习成本并不高。如果你开发运维的过程中和 vim 打交道的次数越来越多，掌握这些技巧可以极大的提升开发效率。即使现在没有需求，也可以提前上手这个强大的工具。</p>
+<h1 id="为什么要写这篇文章">为什么要写这篇文章<a hidden class="anchor" aria-hidden="true" href="#为什么要写这篇文章">#</a></h1>
+<p>现有的 vim 教程 / 文章大多直接罗列完整的 vim 快捷键列表，让人不知从何下手。我认为应当先掌握最重要的、最高频的快捷键，满足日常开发所需；其他低频使用的快捷键，可以作为一个速查表按需查看，vim 的进阶用法也可以之后再深入研究。</p>
+<p>因此，我尝试作为一个 vim 初学者，总结 vim 主要和次要的快捷键，同时提供一些学习 vim 的资源。</p>
+<p>注意：在阅读本文时，你随时可以在终端执行 vimtutor，打开一个教程文本文件，尝试某个快捷键或命令。</p>
+<h1 id="学习资源">学习资源<a hidden class="anchor" aria-hidden="true" href="#学习资源">#</a></h1>
+<ul>
+<li><a href="https://missing-semester-cn.github.io/2020/editors/">Missing Semester - 3. Vim 编辑器</a>：非常推荐的课程，所有内容都很有帮助</li>
+<li><a href="https://youtu.be/wlR5gYd6um0">Mastering Vim</a>：讲解 vim 里的“编程语言范式”，整体理解 vim</li>
+<li>vimtutor：安装 vim 后自带的教程，在终端执行 vimtutor 即可打开，mac 系统下是中文文档</li>
+<li><a href="https://vim-adventures.com/">Vim Adventure</a>：以游戏的方式学习 vim</li>
+</ul>
+<blockquote>
+<p>这里顺便再推荐一些可视化学习资源：</p>
+<ul>
+<li>数据结构与算法：<a href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html">Data Structure Visualization</a>、<a href="https://visualgo.net/zh">Visualgo</a></li>
+<li>正则表达式：<a href="https://regexper.com/">regexper</a></li>
+<li>Git：<a href="https://learngitbranching.js.org/?demo=&amp;locale=zh_CN">Learn Git Branching</a>（强烈推荐）、<a href="http://git-school.github.io/visualizing-git/">Visualizing Git</a></li>
+</ul></blockquote>
+<h1 id="术语说明">术语说明<a hidden class="anchor" aria-hidden="true" href="#术语说明">#</a></h1>
+<p>vim 中有一些术语：</p>
+<ul>
+<li>mode：标准模式 normal、插入模式 insert、可视模式 visual 等。</li>
+<li>verb：vim 里执行的操作，比如删除 d、修改 c、拷贝 y、查找 f 等。verb 后面需要跟一个 motion，表示该操作生效的范围。</li>
+<li>motion：vim 里移动的范围，比如向右一个字母 l、向下一行 j、向右一个单词 w 等。本文中有时候也称其为 “range”。</li>
+</ul>
+<blockquote>
+<p>💡 如果你对 Vim 的语法感兴趣，可以阅读这篇文章： <a href="https://learnvim.irian.to/basics/vim_grammar">https://learnvim.irian.to/basics/vim_grammar</a></p></blockquote>
+<h1 id="符号说明">符号说明<a hidden class="anchor" aria-hidden="true" href="#符号说明">#</a></h1>
+<p>标题的前缀：</p>
+<ul>
+<li>[M]：移动类，move</li>
+<li>[E]：编辑类，edit</li>
+<li>[F]：查找类，find</li>
+</ul>
+<h1 id="入门">入门<a hidden class="anchor" aria-hidden="true" href="#入门">#</a></h1>
+<h2 id="标准模式--插入模式">标准模式 / 插入模式<a hidden class="anchor" aria-hidden="true" href="#标准模式--插入模式">#</a></h2>
+<ul>
+<li>标准模式（Normal Mode）：进入 vim 的默认模式，这个模式下按下任何键不会实际输入到文本中，按下 : 可以执行命令</li>
+<li>插入模式（Insert Mode）：在标准模式按下 i 进入插入模式，此时可以输入文本；按下 <ESC> 退出插入模式</li>
+</ul>
+<blockquote>
+<p>💡 除了以上两个模式，vim 还有 <a href="https://imageslr.com/2021/vim#visual-mode">visual mode</a>，用来选择一个范围的文本。
+建议配置 jj 退出插入模式，这样左手不需要移动到最左上角去按下 <ESC>。在标准模式下执行：</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="nx">imap</span> <span class="nx">jj</span> <span class="p">&lt;</span><span class="nx">Esc</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以将这条命令写到 vim 的配置文件中。我实际上是把 jj / kk / jk / kj 都配成了退出插入模式。</p>
+<h2 id="执行命令">执行命令：:<command><a hidden class="anchor" aria-hidden="true" href="#执行命令">#</a></h2>
+<p>按下 : 后输入命令，按回车执行。如 :set number 会显示行号。</p>
+<h2 id="退出-vimq--zz">退出 vim：:q / ZZ<a hidden class="anchor" aria-hidden="true" href="#退出-vimq--zz">#</a></h2>
+<ul>
+<li>:q / :quit：退出 vim，不作任何改动</li>
+<li>:q!：退出 vim，丢弃已有的改动</li>
+<li>:wq：保存更改（write）并退出（quit）vim</li>
+<li>ZZ：等同于 :wq，这个快捷键输入比 :wq 更快，注意是大写 Z</li>
+</ul>
+<h2 id="保存文件-w--w">保存文件: :w / :w <filename><a hidden class="anchor" aria-hidden="true" href="#保存文件-w--w">#</a></h2>
+<ul>
+<li>:w：保存更改</li>
+<li>:w <filename>：保存到一个新的文件</li>
+</ul>
+<h2 id="m-基本移动h--j--k--l">[M] 基本移动：h / j / k / l<a hidden class="anchor" aria-hidden="true" href="#m-基本移动h--j--k--l">#</a></h2>
+<p>使用 h、j、k、l 而不是 ←、↓、→、↑，这能够避免将手指移出键盘热区再移回来。如果有必要的话，甚至可以禁用方向键，来强制自己使用 h、j、k、l：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="k">map</span> <span class="p">&lt;</span><span class="nx">Left</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nx">Nop</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">map</span> <span class="p">&lt;</span><span class="nx">Right</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nx">Nop</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">map</span> <span class="p">&lt;</span><span class="nx">Up</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nx">Nop</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">map</span> <span class="p">&lt;</span><span class="nx">Down</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nx">Nop</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="m-前往第一行--最后一行gg--g">[M] 前往第一行 / 最后一行：gg / G<a hidden class="anchor" aria-hidden="true" href="#m-前往第一行--最后一行gg--g">#</a></h2>
+<ul>
+<li>gg：前往第一行</li>
+<li>1G：同 gg</li>
+<li>G：前往最后一行</li>
+</ul>
+<h2 id="m-前往第-n-行ngn">[M] 前往第 n 行：nG、:n<a hidden class="anchor" aria-hidden="true" href="#m-前往第-n-行ngn">#</a></h2>
+<ul>
+<li>nG：前往第 n 行。1G 可以前往第一行。如果希望在 vim 中显示行号，可以在标准模式下执行 set number 命令，也可以将这条命令写到 vim 的配置文件中。</li>
+<li>:n 也可以前往第 n 行，比如 :123前往第 123 行。</li>
+</ul>
+<h2 id="m-向右移动一个单词w--e">[M] 向右移动一个单词：w / e<a hidden class="anchor" aria-hidden="true" href="#m-向右移动一个单词w--e">#</a></h2>
+<ul>
+<li>w：向右移动一个单词，光标将落在下一个单词的首字符</li>
+<li>e：向右移动一个单词，光标将落在当前一个单词的最后一个字符</li>
+<li>在这里，一个单词的定义是<strong>连续的「数字+字母+下划线」</strong>，或者<strong>连续的「特殊字符」</strong>。比如 hello, world!!! 里包含 hello、,、world 和 !!! 四个单词。按 w 跳转时，会跳过单词后面的所有空白字符，落在下一个单词的开头。示例：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl">↓ <span class="nx">光标在这里</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Hello</span><span class="p">,</span> <span class="nx">world</span><span class="p">!</span>
+</span></span><span class="line"><span class="cl">     ↑ <span class="nx">按下</span> <span class="nx">w</span>
+</span></span><span class="line"><span class="cl">    ↑ <span class="nx">按下</span> <span class="nx">e</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Hello</span><span class="p">,</span> <span class="nx">world</span><span class="p">!</span>
+</span></span><span class="line"><span class="cl">       ↑ <span class="nx">按两下</span> <span class="nx">w</span>
+</span></span><span class="line"><span class="cl">     ↑ <span class="nx">按两下</span> <span class="nx">e</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>类似的还有 W / E，区别在于这两个快捷键对单词的定义是连续的「非空字符」，即以空格作为单词的分界线。比如 hello, world!!! 里，包含 hello, 和 world!!! 两个单词。</p>
+<h2 id="m-向左移动一个单词b">[M] 向左移动一个单词：b<a hidden class="anchor" aria-hidden="true" href="#m-向左移动一个单词b">#</a></h2>
+<ul>
+<li>b：向左移动到前一个单词的首字符，相当于是 w 的逆操作。b 取 backwards 首字母，「单词」的定义同 w。</li>
+<li>2b：向左移动两个单词，nb 向左移动 n 个单词。</li>
+<li>B：向左移动一个单词，将「空格」作为单词的分隔符（同 W、E）。</li>
+</ul>
+<h2 id="m-前往当前行第一个--最后一个字符0----_--">[M] 前往当前行第一个 / 最后一个字符：0  $  _  ^<a hidden class="anchor" aria-hidden="true" href="#m-前往当前行第一个--最后一个字符0----_--">#</a></h2>
+<ul>
+<li>0：前往第一个字符，可以理解成是第 0 列</li>
+<li>$：前往最后一个字符</li>
+<li>_：前往第一个非空字符，这在编写 python 等有缩进的代码时很有用。^ 等价。</li>
+</ul>
+<h2 id="删除字符x--x">删除字符：x / X<a hidden class="anchor" aria-hidden="true" href="#删除字符x--x">#</a></h2>
+<ul>
+<li>x：删除当前字符，等同于 <Delete></li>
+<li>X：删除前一个字符</li>
+</ul>
+<h2 id="删除单词dw">删除单词：dw<a hidden class="anchor" aria-hidden="true" href="#删除单词dw">#</a></h2>
+<p>「单词」的定义同 w，单词后面的任意多个空格将被删除。<br>
+类似的还有 dW，删除下一个空格前的单词。</p>
+<h2 id="删除当前行dd">删除当前行：dd<a hidden class="anchor" aria-hidden="true" href="#删除当前行dd">#</a></h2>
+<h2 id="e-在当前位置后面插入a">[E] 在当前位置后面插入：a<a hidden class="anchor" aria-hidden="true" href="#e-在当前位置后面插入a">#</a></h2>
+<p>i 在当前位置前面插入（insert），a 在当前位置后面插入（append）。</p>
+<h2 id="e-在当前行开始--末尾插入i--a">[E] 在当前行开始 / 末尾插入：I / A<a hidden class="anchor" aria-hidden="true" href="#e-在当前行开始--末尾插入i--a">#</a></h2>
+<h2 id="e-在当前行下面--上面插入新行o--o">[E] 在当前行下面 / 上面插入新行：o / O<a hidden class="anchor" aria-hidden="true" href="#e-在当前行下面--上面插入新行o--o">#</a></h2>
+<p>插入新的空白行。</p>
+<h2 id="e-改变大小写--gu--gu">[E] 改变大小写：~ / gu / gU<a hidden class="anchor" aria-hidden="true" href="#e-改变大小写--gu--gu">#</a></h2>
+<ul>
+<li>~：将光标下的字母改变大小写。3~ 是将光标开始的 3 个字母改变大小写。</li>
+<li>gu<motion>：指定范围的字母变成小写。比如 guw 是后一个单词全变成小写，guj 是当前整行改成小写。gU 则是改成大写。</li>
+<li>guu：将当前行的字母改成小写。gUU 是改成大写。</li>
+<li>guiw：将光标所在的单词改成小写。详见下文 inside / around。</li>
+</ul>
+<h2 id="f-移动到下一个指定字符f">[F] 移动到下一个指定字符：f<target><a hidden class="anchor" aria-hidden="true" href="#f-移动到下一个指定字符f">#</a></h2>
+<ul>
+<li>f：ft 移动到下一个 t 出现的位置，f2 移动到下一个 2 出现的位置。f 取 forward 的首字母。</li>
+<li>F：F 类似于 f，向前移动到前一个指定字符。</li>
+<li>t：t 类似于 f，只不过光标会移动到下一个指定字符之前；T 类似于 F，只不过光标会移动到前一个指定字符之后。t 取 until 的含义。
+示例</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl">    ↓ <span class="nx">光标在这里</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Hello</span><span class="p">,</span> <span class="nx">world</span><span class="p">!</span>
+</span></span><span class="line"><span class="cl">        ↑ <span class="nx">fo</span>
+</span></span><span class="line"><span class="cl">         ↑ <span class="nx">fr</span>
+</span></span><span class="line"><span class="cl">↑ <span class="nx">Fh</span>
+</span></span><span class="line"><span class="cl">       ↑ <span class="nx">to</span>
+</span></span><span class="line"><span class="cl"> ↑ <span class="nx">Th</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="e-撤销--重做u----r">[E] 撤销 / 重做：u / <Ctrl> + r<a hidden class="anchor" aria-hidden="true" href="#e-撤销--重做u----r">#</a></h2>
+<ul>
+<li>u：撤销（undo）</li>
+<li><Ctrl> + r：重做（redo）</li>
+</ul>
+<h1 id="中场休息vim-的一些模式">中场休息：vim 的一些模式<a hidden class="anchor" aria-hidden="true" href="#中场休息vim-的一些模式">#</a></h1>
+<h2 id="重复-n-次操作n">重复 n 次操作：n<action><a hidden class="anchor" aria-hidden="true" href="#重复-n-次操作n">#</a></h2>
+<p>Vim 中几乎所有操作都可以通过一个 n 前缀来重复 n 次：</p>
+<ul>
+<li>5h 向左移动 5 个字符。5j 向下移动 5 行。2w 向右移动两个单词，等同于按两次 w。</li>
+<li>2x 删除两个字符，2X 向左删除两个字符。</li>
+<li>3fa 在当前行查找第 3 次出现的 a，等同于按 3 次 fa。</li>
+<li>2u 撤销前两步操作，等同于按两次 u。2<Ctrl> + r 重做被撤销的两步操作，等同于按两次 <Ctrl> + r。</li>
+</ul>
+<blockquote>
+<p>💡 移动类命令 (motion) 如 h / w，和操作类命令 (verb) 如 d / x / f 都支持在前面加 n 来重复多次。</p></blockquote>
+<h2 id="操作任意范围">操作任意范围：<verb><motion><a hidden class="anchor" aria-hidden="true" href="#操作任意范围">#</a></h2>
+<p>我们以 d 命令为例。d 可以和任意光标移动的操作结合，来删除一个范围的内容。<br>
+比如：w 是跳到下一个单词的开头，那么 dw 就是删除到下一个单词的开头；b 是跳转到前一个单词的开头，那么 db 就是删除到前一个单词的开头。以此类推，d0 是删除当前位置到行开头的所有内容，dG 是删除当前行到文件末尾的所有内容，dgg 是删除当前行到文件开头的所有内容。<br>
+大部分命令都支持 <verb><n><motion> 和 <n><verb><motion> 两种模式，比如 d2w 和 2dw 都是删除后两个单词。但在语义上有区别：d2w 表示删除 2w 范围的内容，而 2dw 表示 dw 命令重复 2 次。</p>
+<blockquote>
+<p>💡 d / c / y 等 verb，都支持上述模式。比如 c2w 修改后两个单词，y2j 复制下两行。</p></blockquote>
+<h2 id="命令的小写和大写d--d-等">命令的小写和大写：d / D 等<a hidden class="anchor" aria-hidden="true" href="#命令的小写和大写d--d-等">#</a></h2>
+<p>不同的方向：</p>
+<ul>
+<li>x 向右、X 向左</li>
+<li>p 向下、P 向上</li>
+<li>o 向下、O 向上</li>
+<li>f 向右、F 向左
+更严格的条件：</li>
+<li>w 将特殊字符作为独立单词，W 只将空格作为单词分隔符</li>
+<li>e / E、b / B 同理
+更大的范围：</li>
+<li>a 在当前位置后面插入、A 在当前行末尾插入</li>
+<li>i 在当前位置前插入、I 在当前行开始插入</li>
+<li>d 删除一个范围、D 删除到行末尾</li>
+<li>c 删除一个范围、C 删除到行末尾，并进入编辑模式</li>
+<li>s 删除当前字符，并进入编辑模式；S 删除当前整行，并进入编辑模式
+连续操作：</li>
+<li>r 替换一个字符、R 连续替换多个字符直到按下 <Esc></li>
+</ul>
+<h2 id="两个字母重复dd--cc--yy--guu">两个字母重复：dd / cc / yy / guu<a hidden class="anchor" aria-hidden="true" href="#两个字母重复dd--cc--yy--guu">#</a></h2>
+<p>两个 verb 字母重复，表示对当前整行操作：</p>
+<ul>
+<li>dd：删除整行</li>
+<li>cc：删除整行，并进入编辑模式</li>
+<li>yy：复制整行</li>
+<li>guu：当前整行变成小写</li>
+<li>gUU：当前整行变成大写</li>
+</ul>
+<h2 id="重复上次操作----">重复上次操作：. / , / ;<a hidden class="anchor" aria-hidden="true" href="#重复上次操作----">#</a></h2>
+<ul>
+<li>.：重复上次的编辑操作。比如执行了 A123<Esc> 在当前行尾插入 123 后，可以移动到下一行，按 . 在该行末尾插入 123。</li>
+<li>, / ;：重复当前行内的上一次 / 下一次 f 查找。比如在当前行按 fa 找到第一个 a 字符后，按 ; 可以查找下一个，等价于再按 fa。按 , 是查找上一个，等价于 Fa。</li>
+<li>n / N：按 /bar<Enter> 搜索 bar 字符串后，按 n 可以查找下一个，按 N 查找上一个。</li>
+</ul>
+<h1 id="进阶">进阶<a hidden class="anchor" aria-hidden="true" href="#进阶">#</a></h1>
+<h2 id="e-替换一个字符r">[E] 替换一个字符：r<a hidden class="anchor" aria-hidden="true" href="#e-替换一个字符r">#</a></h2>
+<p>r：再按下任意键，替换（replace）当前字符，等同于 x + i。示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl">    ↓ <span class="nx">光标在这里</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Helle</span><span class="p">,</span> <span class="nx">world</span><span class="p">!</span>
+</span></span><span class="line"><span class="cl"># <span class="nx">先按</span> <span class="nx">r</span>，<span class="nx">再按</span> <span class="nx">o</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Hello</span><span class="p">,</span> <span class="nx">world</span><span class="p">!</span>
+</span></span><span class="line"><span class="cl">    ↑ <span class="nx">光标在这里</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="e-替换连续多个字符r">[E] 替换连续多个字符：R<a hidden class="anchor" aria-hidden="true" href="#e-替换连续多个字符r">#</a></h2>
+<p>R：替换连续的多个字符，按下 <Esc> 可以退出替换模式。</p>
+<h2 id="e-更改一个范围的内容c">[E] 更改一个范围的内容：c<a hidden class="anchor" aria-hidden="true" href="#e-更改一个范围的内容c">#</a></h2>
+<p>c 取 change 的首字母，这个命令的便捷之处在于将「删除操作」和「进入编辑模式」合二为一，可以少按一个键。</p>
+<ul>
+<li>cw：更改下一个单词，等同于 dw + i</li>
+<li>c2w：更改后两个单词，等同于 d2w + i</li>
+<li>c$：更改从当前位置到行结束的所有内容，等同于 d$ + i
+和 d 一样，c 也可以和任意光标移动的操作符结合，来更改一个范围的内容。</li>
+</ul>
+<h2 id="删除当前字符并进入编辑模式s">删除当前字符，并进入编辑模式：s<a hidden class="anchor" aria-hidden="true" href="#删除当前字符并进入编辑模式s">#</a></h2>
+<p>s 等同于 x + i。</p>
+<h2 id="e-删除当前整行并进入编辑模式s--cc">[E] 删除当前整行，并进入编辑模式：S / cc<a hidden class="anchor" aria-hidden="true" href="#e-删除当前整行并进入编辑模式s--cc">#</a></h2>
+<p>S 等同于 dd + o。cc 也可以删除整行，并进入编辑模式。</p>
+<h2 id="e-从当前位置开始向右删除整行d">[E] 从当前位置开始向右删除整行：D<a hidden class="anchor" aria-hidden="true" href="#e-从当前位置开始向右删除整行d">#</a></h2>
+<p>D 等同于 <code>d$</code>。</p>
+<h2 id="e-从当前位置开始向右删除整行并进入编辑模式c">[E] 从当前位置开始向右删除整行，并进入编辑模式：C<a hidden class="anchor" aria-hidden="true" href="#e-从当前位置开始向右删除整行并进入编辑模式c">#</a></h2>
+<p>等同于 <code>c$</code>，或者 <code>d$</code> + <code>a</code>，或者 <code>D</code> + <code>a</code>。</p>
+<h2 id="v-可视模式选择内容v--v----v">[V] 可视模式选择内容：v / V / <Ctrl> + v<a hidden class="anchor" aria-hidden="true" href="#v-可视模式选择内容v--v----v">#</a></h2>
+<p>按下 v 进入可视模式（visual mode），然后移动光标以选择文本。可以针对选中的文本执行任意操作 (verb)，比如：</p>
+<ul>
+<li>按下 y 可以复制选中的文本，再移动到别的位置按下 p 粘贴这些文本</li>
+<li>按下 d 可以删除选中的文本</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/linux/">Linux</a></li>
+    </ul>
+
+  </footer><div id="giscus"></div>
+<script>
+  
+  const getTheme = () => {
+    const storedTheme = localStorage.getItem("pref-theme");
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return storedTheme || systemTheme;
+  };
+
+  
+  const setGiscusTheme = () => {
+    const theme = getTheme();
+    const message = {
+      giscus: {
+        setConfig: {
+          theme: theme === 'dark' ? 'dark' : 'light' 
+        }
+      }
+    };
+
+    const iframe = document.querySelector('iframe.giscus-frame');
+    iframe?.contentWindow.postMessage(message, 'https://giscus.app');
+  };
+
+  
+  const initGiscus = () => {
+    const giscus = document.createElement('script');
+    
+    
+    const config = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'sonnycalcr/sonnycalcr.github.io',
+      'data-repo-id': 'R_kgDOMed_Fg',
+      'data-category': 'Announcements',
+      'data-category-id': 'DIC_kwDOMed_Fs4ChXJF',
+      'data-mapping': 'pathname',
+      'data-strict': '0',
+      'data-reactions-enabled': '1',
+      'data-emit-metadata': '0',
+      'data-input-position': 'bottom',
+      'data-theme': getTheme() === 'dark' ? 'dark' : 'light', 
+      'data-lang': 'zh-CN',
+      crossorigin: 'anonymous',
+      async: true
+    };
+
+    Object.entries(config).forEach(([key, value]) => {
+      giscus.setAttribute(key, value);
+    });
+
+    
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'https://giscus.app') return;
+      if (event.data.giscus?.loading === false) {
+        setGiscusTheme(); 
+      }
+    });
+
+    document.getElementById('giscus').appendChild(giscus);
+  };
+
+  
+  document.addEventListener('DOMContentLoaded', initGiscus);
+
+  
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      setTimeout(setGiscusTheme, 100); 
+    });
+  }
+
+  
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setGiscusTheme);
+</script>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span><a href="https://1cefro9.github.io/">©2025 Birdio&rsquo;s Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js"
+  integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj+Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  var OSName = "unknown";
+  var navApp = navigator.userAgent.toLowerCase();
+  switch (true) {
+    case (navApp.indexOf("win") != -1):
+      OSName = "windows";
+      break;
+    case (navApp.indexOf("mac") != -1):
+      OSName = "apple";
+      break;
+    case (navApp.indexOf("linux") != -1):
+      OSName = "linux";
+      break;
+    case (navApp.indexOf("x11") != -1):
+      OSName = "unix";
+      break;
+  }
+
+  const images = Array.from(document.querySelectorAll(".post-content img"));
+  images.forEach(img => {
+    mediumZoom(img, {
+      margin: 1,    
+      
+      container: null,  
+      template: null,  
+      
+    });
+  });
+
+  if (OSName == "windows") {
+    document.body.className += ' win11'
+  }
+</script>
+
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
